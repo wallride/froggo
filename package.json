@@ -4,8 +4,13 @@
   "license": "MIT",
   "scripts": {},
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "@nx/expo": "^23.1.0",
+    "@nx/nest": "^23.1.0",
+    "@nx/react": "^23.1.0"
+  },
   "devDependencies": {
+    "@nx/eslint": "^23.1.0",
     "@nx/js": "23.1.0",
     "@nx/workspace": "23.1.0",
     "nx": "23.1.0"
