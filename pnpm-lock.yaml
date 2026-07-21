@@ -8,12 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@nx/expo':
-        specifier: ^23.1.0
-        version: 23.1.0(@babel/core@7.29.7(supports-color@7.2.0))(@babel/traverse@7.29.7(supports-color@7.2.0))(@nx/jest@23.1.0(@babel/traverse@7.29.7(supports-color@7.2.0))(@types/node@26.1.1)(babel-plugin-macros@3.1.0)(nx@23.1.0)(supports-color@7.2.0)(typescript@6.0.3))(@types/babel__core@7.20.5)(@types/node@26.1.1)(@zkochan/js-yaml@0.0.7)(babel-plugin-macros@3.1.0)(csso@5.0.5)(debug@4.4.3(supports-color@7.2.0))(eslint@10.7.0(supports-color@7.2.0))(lightningcss@1.33.0)(nx@23.1.0)(postcss@8.5.20)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(supports-color@7.2.0)(typescript@6.0.3)(vite@8.1.5(@types/node@26.1.1)(terser@5.49.0)(yaml@2.9.0))
-      '@nx/nest':
-        specifier: ^23.1.0
-        version: 23.1.0(@babel/traverse@7.29.7(supports-color@7.2.0))(@nx/jest@23.1.0(@babel/traverse@7.29.7(supports-color@7.2.0))(@types/node@26.1.1)(babel-plugin-macros@3.1.0)(nx@23.1.0)(supports-color@7.2.0)(typescript@6.0.3))(@types/node@26.1.1)(@zkochan/js-yaml@0.0.7)(babel-plugin-macros@3.1.0)(eslint@10.7.0(supports-color@7.2.0))(express@4.22.2(supports-color@7.2.0))(nx@23.1.0)(rxjs@7.8.1)(supports-color@7.2.0)(typescript@6.0.3)
       '@nx/react':
         specifier: ^23.1.0
         version: 23.1.0(@babel/core@7.29.7(supports-color@7.2.0))(@babel/traverse@7.29.7(supports-color@7.2.0))(@nx/jest@23.1.0(@babel/traverse@7.29.7(supports-color@7.2.0))(@types/node@26.1.1)(babel-plugin-macros@3.1.0)(nx@23.1.0)(supports-color@7.2.0)(typescript@6.0.3))(@types/babel__core@7.20.5)(@zkochan/js-yaml@0.0.7)(csso@5.0.5)(debug@4.4.3(supports-color@7.2.0))(eslint@10.7.0(supports-color@7.2.0))(lightningcss@1.33.0)(nx@23.1.0)(postcss@8.5.20)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(supports-color@7.2.0)(typescript@6.0.3)(vite@8.1.5(@types/node@26.1.1)(terser@5.49.0)(yaml@2.9.0))
@@ -21,9 +15,15 @@ importers:
       '@nx/eslint':
         specifier: ^23.1.0
         version: 23.1.0(@babel/traverse@7.29.7(supports-color@7.2.0))(@nx/jest@23.1.0(@babel/traverse@7.29.7(supports-color@7.2.0))(@types/node@26.1.1)(babel-plugin-macros@3.1.0)(nx@23.1.0)(supports-color@7.2.0)(typescript@6.0.3))(@zkochan/js-yaml@0.0.7)(eslint@10.7.0(supports-color@7.2.0))(nx@23.1.0)(supports-color@7.2.0)
+      '@nx/expo':
+        specifier: ^23.1.0
+        version: 23.1.0(@babel/core@7.29.7(supports-color@7.2.0))(@babel/traverse@7.29.7(supports-color@7.2.0))(@nx/jest@23.1.0(@babel/traverse@7.29.7(supports-color@7.2.0))(@types/node@26.1.1)(babel-plugin-macros@3.1.0)(nx@23.1.0)(supports-color@7.2.0)(typescript@6.0.3))(@types/babel__core@7.20.5)(@types/node@26.1.1)(@zkochan/js-yaml@0.0.7)(babel-plugin-macros@3.1.0)(csso@5.0.5)(debug@4.4.3(supports-color@7.2.0))(eslint@10.7.0(supports-color@7.2.0))(lightningcss@1.33.0)(nx@23.1.0)(postcss@8.5.20)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(supports-color@7.2.0)(typescript@6.0.3)(vite@8.1.5(@types/node@26.1.1)(terser@5.49.0)(yaml@2.9.0))
       '@nx/js':
         specifier: 23.1.0
         version: 23.1.0(@babel/traverse@7.29.7(supports-color@7.2.0))(nx@23.1.0)(supports-color@7.2.0)
+      '@nx/nest':
+        specifier: ^23.1.0
+        version: 23.1.0(@babel/traverse@7.29.7(supports-color@7.2.0))(@nx/jest@23.1.0(@babel/traverse@7.29.7(supports-color@7.2.0))(@types/node@26.1.1)(babel-plugin-macros@3.1.0)(nx@23.1.0)(supports-color@7.2.0)(typescript@6.0.3))(@types/node@26.1.1)(@zkochan/js-yaml@0.0.7)(babel-plugin-macros@3.1.0)(eslint@10.7.0(supports-color@7.2.0))(express@4.22.2(supports-color@7.2.0))(nx@23.1.0)(rxjs@7.8.1)(supports-color@7.2.0)(typescript@6.0.3)
       '@nx/workspace':
         specifier: 23.1.0
         version: 23.1.0
