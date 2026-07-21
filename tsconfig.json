@@ -28,60 +28,10 @@
     "noFallthroughCasesInSwitch": true,
     "downlevelIteration": true,
     "paths": {
-      "@admc-addons-sbrf.tmpos/common": [
-        "libs/common/src/index.ts"
-      ],
-      "@admc-addons-sbrf.tmpos/models-states": [
-        "libs/models-states/src/index.ts"
-      ],
-      "@admc-addons-sbrf.tmpos/models-states.tmpos": [
-        "libs/models-states.tmpos/src/index.ts"
-      ],
-      "@admc-addons-sbrf.tmpos/models-states.cards": [
-        "libs/models-states.cards/src/index.ts"
-      ],
-      "@admc-addons-sbrf.tmpos/providers-states.tmpos": [
-        "libs/providers-states.tmpos/src/index.ts"
-      ],
-      "@admc-addons-sbrf.tmpos/providers-states.cards": [
-        "libs/providers-states.cards/src/index.ts"
-      ],
-      "@admc-addons-sbrf.tmpos/providers-events": [
-        "libs/providers-events/src/index.ts"
-      ],
-      "@admc-addons-sbrf.tmpos/providers-events.configuration": [
-        "libs/providers-events.configuration/src/index.ts"
-      ],
-      "@admc-addons-sbrf.tmpos/providers-events.commands": [
-        "libs/providers-events.commands/src/index.ts"
-      ],
-      "@admc-addons-sbrf.tmpos/providers-events.adm": [
-        "libs/providers-events.adm/src/index.ts"
-      ],
-      "@admc-addons-sbrf.tmpos/providers-events.routing": [
-        "libs/providers-events.routing/src/index.ts"
-      ],
-      "@admc-addons-sbrf.tmpos/providers-messages": [
-        "libs/providers-messages/src/index.ts"
-      ],
-      "@admc-addons-sbrf.tmpos/models-events.commands": [
-        "libs/models-events.commands/src/index.ts"
-      ],
-      "@admc-addons-sbrf.tmpos/models-events.cards": [
-        "libs/models-events.cards/src/index.ts"
-      ],
-      "@admc-addons-sbrf.tmpos/models-events.configuration": [
-        "libs/models-events.configuration/src/index.ts"
-      ],
-      "@admc-addons-sbrf.tmpos/components-message-processing": [
-        "libs/components/message-processing/src/index.ts"
-      ],
-      "@admc-addons-sbrf.tmpos/monitoring": [
-        "libs/monitoring/src/index.ts"
-      ]
+
     }
   },
   "files": [],
   "include": [],
-  "exclude": ["node_modules", "tmp"]
+  "exclude": ["node_modules"]
 }
