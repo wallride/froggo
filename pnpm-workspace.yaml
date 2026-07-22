@@ -2,3 +2,6 @@ autoInstallPeers: true
 allowBuilds:
   nx: true
   unrs-resolver: set this to true or false
+minimumReleaseAgeExclude:
+  - react-dom@19.2.8
+  - react@19.2.8

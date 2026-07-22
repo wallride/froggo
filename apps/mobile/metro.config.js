@@ -20,7 +20,7 @@ const customConfig = {
   },
   resolver: {
     assetExts: assetExts.filter((ext) => ext !== 'svg'),
-    sourceExts: [...sourceExts, 'cjs', 'mjs', 'svg'],
+    sourceExts: [...sourceExts, 'ts', 'tsx', 'cjs', 'mjs', 'svg'],
   },
 };
 
