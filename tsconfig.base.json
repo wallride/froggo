@@ -1,0 +1,42 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "esnext",
+    "lib": ["dom", "esnext"],
+    "allowSyntheticDefaultImports": true,
+    "downlevelIteration": true,
+    "importHelpers": true,
+    "noEmitHelpers": true,
+    "preserveConstEnums": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "useUnknownInCatchVariables": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "paths": {
+      "@froggo/common.models": [
+        "libs/common/models/src/index.ts"
+      ],
+      "@froggo/backend.providers": [
+        "libs/backend/providers/src/index.ts"
+      ],
+      "@froggo/common.api.admin": [
+        "libs/common/api/admin/src/index.ts"
+      ],
+      "@froggo/frontend": [
+        "libs/frontend/src/index.ts"
+      ],
+      "@froggo/common.api.mobile": [
+        "libs/common/api/mobile/src/index.ts"
+      ]
+    }
+  }
+}

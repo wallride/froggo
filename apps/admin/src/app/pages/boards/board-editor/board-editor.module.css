@@ -1,0 +1,21 @@
+.grid {
+  border-collapse: collapse;
+  user-select: none;
+}
+
+.cell {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  max-width: 30px;
+  border: 1px solid #ccc;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  font-family: sans-serif;
+}
+
+.target {
+  font-weight: bold;
+  text-decoration: underline;
+}

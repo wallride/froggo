@@ -1,40 +1,6 @@
 {
-  "compilerOptions": {
-    "rootDir": ".",
-    "baseUrl": ".",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "alwaysStrict": true,
-    "useUnknownInCatchVariables": true,
-    "skipLibCheck": true,
-    "strictNullChecks": true,
-    "noImplicitAny": true,
-    "preserveConstEnums": true,
-    "declaration": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es2022",
-    "noEmitHelpers": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "removeComments": false,
-    "importHelpers": true,
-    "lib": [
-      "es2022"
-    ],
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "downlevelIteration": true,
-    "paths": {}
-  },
+  "extends": "./tsconfig.base.json",
   "files": [],
   "include": [],
-  "exclude": [
-    "node_modules"
-  ],
-  "extends": "expo/tsconfig.base"
+  "exclude": ["node_modules", "tmp"]
 }

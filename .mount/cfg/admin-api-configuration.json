@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "boardProvider": {
+      "storage": {
+        "rootPath": ".mount/storages/boards",
+        "filePatternRegExp": ".+\\.json"
+      },
+      "space": 2
+    }
+  }
+}

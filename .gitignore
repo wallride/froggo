@@ -74,3 +74,16 @@ npm-debug.*
 *.orig.*
 web-build/
 cache/
+vite.config.*.timestamp*
+
+# Runtime data written by JSON file providers into .mount storages
+.mount/storages/**
+!.mount/storages/**/README.md
+
+# Local environment overrides
+.env
+.env.local
+.env.*.local
+!.env.example
+
+apps/mobile/.expo

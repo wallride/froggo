@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "playerProvider": {
+      "storage": {
+        "rootPath": ".mount/storages/players",
+        "filePatternRegExp": ".+\\.json"
+      },
+      "space": 2
+    }
+  }
+}

@@ -1,12 +1,14 @@
 import { SafeAreaView, StyleSheet, Text } from 'react-native';
 
+import { usePlayer } from '../identity/player-context';
+
 export function HomeScreen() {
+  const { player } = usePlayer();
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>🐸 Froggo</Text>
-      <Text style={styles.subtitle}>
-        Workspace is ready.
-      </Text>
+      {player && <Text style={styles.subtitle}>Welcome, {player.name}, {player.id}!</Text>}
     </SafeAreaView>
   );
 }
