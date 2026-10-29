@@ -1,7 +1,7 @@
-import { MouseEvent as ReactMouseEvent, useEffect, useRef } from 'react';
+import { MouseEvent as ReactMouseEvent, useEffect, useMemo, useRef } from 'react';
 
-import { Cell } from '@froggo/common.models';
-import { kindColors } from '@froggo/frontend';
+import { Cell } from '@dead-lines-inc/common.models';
+import { kindColors } from '@dead-lines-inc/frontend';
 
 import styles from './board-editor.module.css';
 
@@ -27,8 +27,44 @@ function findUnusedKind(cells: Cell[]): number {
   return kind;
 }
 
+// A cell can't hold a target if it shares a row/column with an existing
+// target, or is one of its (up to 8) neighbours — mirrors validateBoard's
+// row/col/adjacency checks.
+function findUnsuitableCells(size: number, cells: Cell[]): Set<number> {
+  const unsuitable = new Set<number>();
+
+  cells.forEach((cell, index) => {
+    if (!cell.hasTarget) return;
+    const targetRow = Math.floor(index / size);
+    const targetCol = index % size;
+
+    for (let row = 0; row < size; row++) {
+      unsuitable.add(row * size + targetCol);
+    }
+    for (let col = 0; col < size; col++) {
+      unsuitable.add(targetRow * size + col);
+    }
+    for (let row = targetRow - 1; row <= targetRow + 1; row++) {
+      for (let col = targetCol - 1; col <= targetCol + 1; col++) {
+        if (row < 0 || row >= size || col < 0 || col >= size) continue;
+        unsuitable.add(row * size + col);
+      }
+    }
+  });
+
+  cells.forEach((cell, index) => {
+    if (cell.hasTarget) unsuitable.delete(index);
+  });
+
+  return unsuitable;
+}
+
 export function BoardEditor({ size, cells, onChange }: BoardEditorProps) {
   const dragStateRef = useRef<DragState | null>(null);
+  const unsuitableCells = useMemo(
+    () => findUnsuitableCells(size, cells),
+    [size, cells],
+  );
 
   useEffect(() => {
     const handleWindowMouseUp = () => {
@@ -62,10 +98,20 @@ export function BoardEditor({ size, cells, onChange }: BoardEditorProps) {
     dragStateRef.current = null;
     if (!dragState || dragState.dragged) return;
     const clicked = cells[index];
+    if (clicked.hasTarget) {
+      // Removing a target clears its whole kind region, not just the cell.
+      onChange(
+        cells.map((cell) =>
+          cell.kind === clicked.kind
+            ? { ...cell, hasTarget: undefined, kind: 0 }
+            : cell,
+        ),
+      );
+      return;
+    }
+    if (unsuitableCells.has(index)) return;
     const next = cells.slice();
-    next[index] = clicked.hasTarget
-      ? { ...clicked, hasTarget: undefined, kind: 0 }
-      : { ...clicked, hasTarget: true, kind: findUnusedKind(cells) };
+    next[index] = { ...clicked, hasTarget: true, kind: findUnusedKind(cells) };
     onChange(next);
   };
 
@@ -86,11 +132,12 @@ export function BoardEditor({ size, cells, onChange }: BoardEditorProps) {
                   onMouseEnter={() => handleMouseEnter(index)}
                   onMouseUp={() => handleMouseUp(index)}
                 >
-                  <span
-                    className={cell.hasTarget ? styles['target'] : undefined}
-                  >
-                    {cell.kind}
-                  </span>
+                  {cell.hasTarget && (
+                    <span className={styles['target']}>{cell.kind}</span>
+                  )}
+                  {!cell.hasTarget && unsuitableCells.has(index) && (
+                    <span className={styles['unsuitable']}>✕</span>
+                  )}
                 </td>
               );
             })}

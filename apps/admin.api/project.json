@@ -54,8 +54,7 @@
       "dependsOn": ["build"],
       "options": {
         "buildTarget": "admin.api:build",
-        "runBuildTargetDependencies": false,
-        "args": ["--config=.mount/cfg/admin-api-configuration.json"]
+        "runBuildTargetDependencies": false
       },
       "configurations": {
         "development": {
@@ -72,6 +71,13 @@
       "options": {
         "jestConfig": "apps/admin.api/jest.config.ts",
         "passWithNoTests": true
+      }
+    },
+    "release": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "semantic-release --no-ci --extends ./apps/admin.api/release.config.mjs",
+        "cwd": "{workspaceRoot}"
       }
     }
   }

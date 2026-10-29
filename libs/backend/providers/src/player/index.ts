@@ -1,2 +1,4 @@
 export * from "./IPlayerProvider";
-export * from "./JSONFilePlayerProvider";
+export * from "./MongoPlayerProvider";
+export * from "./IPlayerAvatarsProvider";
+export * from "./MongoPlayerAvatarsProvider";

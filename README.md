@@ -1,6 +1,6 @@
-# Froggo
+# Dead Lines Inc.
 
-Froggo is a puzzle game platform built as a TypeScript monorepo.
+Dead Lines Inc. is a puzzle game platform built as a TypeScript monorepo.
 
 ## Stack
 
@@ -29,3 +29,15 @@ The project follows:
 - Feature-first architecture
 - Strict TypeScript
 - Framework-independent domain layer
+
+
+## Run/serve commands
+Each backend takes its environment (configuration path, port, secrets) from its own
+`apps/<app>/.env` (not committed); start from `apps/<app>/.env.example`.
+Releases and deployment: [docs/deployment.md](docs/deployment.md).
+```
+npx nx serve mobile.api
+npx nx serve mobile
+npx nx serve admin.api
+npx nx serve admin
+```

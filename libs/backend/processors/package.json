@@ -1,0 +1,8 @@
+{
+  "name": "@dead-lines-inc/backend.processors",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "private": true,
+  "dependencies": {
+  }
+}

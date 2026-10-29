@@ -1,4 +1,7 @@
-import { ActivityIndicator, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text } from 'react-native';
+import { fonts } from '@dead-lines-inc/frontend';
+
+import { Screen } from '../layout/Screen';
 
 interface LoadingScreenProps {
   error?: string | null;
@@ -6,19 +9,18 @@ interface LoadingScreenProps {
 
 export function LoadingScreen({ error }: LoadingScreenProps) {
   return (
-    <SafeAreaView style={styles.container}>
+    <Screen style={styles.container}>
       {error ? (
         <Text style={styles.error}>{error}</Text>
       ) : (
         <ActivityIndicator size="large" style={styles.spinner} />
       )}
-    </SafeAreaView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -27,6 +29,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   error: {
+    fontFamily: fonts.regular,
     marginTop: 24,
     fontSize: 16,
     color: '#c00',

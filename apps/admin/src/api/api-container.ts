@@ -1,4 +1,4 @@
-import { IBoardAPI } from '@froggo/common.api.admin';
+import { IBoardAPI } from '@dead-lines-inc/common.api.admin';
 
 import { BoardAPI } from './board-api';
 

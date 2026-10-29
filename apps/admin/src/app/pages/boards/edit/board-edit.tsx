@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 import {
   Board,
@@ -7,7 +7,7 @@ import {
   BoardStateEnum,
   Cell,
   validateBoard,
-} from '@froggo/common.models';
+} from '@dead-lines-inc/common.models';
 
 import { useApi } from '../../../../api/api-context';
 import { BoardEditor } from '../board-editor/board-editor';
@@ -18,7 +18,6 @@ const COMPLEXITY_OPTIONS = Object.values(BoardComplexityEnum);
 
 export function BoardEdit() {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const { boards: boardApi } = useApi();
 
   const id = searchParams.get('id');
@@ -64,7 +63,8 @@ export function BoardEdit() {
     }
     try {
       await boardApi.update(updated);
-      navigate('/boards');
+      setBoard(updated);
+      setError(null);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to save board');
     }
@@ -122,6 +122,7 @@ export function BoardEdit() {
       <button type="button" onClick={handleSave}>
         Save
       </button>
+      <Link to={`/boards/test?id=${board.id}`}>Test</Link>
     </div>
   );
 }

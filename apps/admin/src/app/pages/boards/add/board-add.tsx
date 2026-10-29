@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { BaseBoard, Cell, validateBoard } from '@froggo/common.models';
+import { BaseBoard, Cell, validateBoard } from '@dead-lines-inc/common.models';
 
 import { useApi } from '../../../../api/api-context';
 import { BoardEditor } from '../board-editor/board-editor';
+import { generateBoard } from '../generate-board';
 import styles from './board-add.module.css';
 
 export function BoardAdd() {
@@ -16,7 +17,8 @@ export function BoardAdd() {
   const isValidSize = Number.isInteger(size) && size > 0;
 
   const [cells, setCells] = useState<Cell[]>(() =>
-    Array.from({ length: isValidSize ? size * size : 0 }, () => ({
+    Array.from({ length: isValidSize ? size * size : 0 }, (_, index) => ({
+      key: index + 1,
       kind: 0,
       hasTarget: false,
     })),
@@ -35,8 +37,8 @@ export function BoardAdd() {
       return;
     }
     try {
-      await boardApi.add(board);
-      navigate('/boards');
+      const created = await boardApi.add(board);
+      navigate(`/boards/edit?id=${created.id}`);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to save board');
     }
@@ -48,6 +50,9 @@ export function BoardAdd() {
         Add board ({size}x{size})
       </h1>
       {error && <p className={styles['error']}>{error}</p>}
+      <button type="button" onClick={() => setCells(generateBoard(size))}>
+        Generate
+      </button>
       <BoardEditor size={size} cells={cells} onChange={setCells} />
       <button type="button" onClick={handleSave}>
         Save

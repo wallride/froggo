@@ -1,6 +1,6 @@
 # Vision
 
-Froggo is a mobile puzzle game.
+Dead Lines Inc. is a mobile puzzle game.
 
 The project consists of:
 

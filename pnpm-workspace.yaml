@@ -8,3 +8,4 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - react-dom@19.2.8
   - react@19.2.8
+  - mongodb@7.6.0

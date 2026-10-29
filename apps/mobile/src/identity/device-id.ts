@@ -2,7 +2,7 @@ import { Platform } from 'react-native';
 import * as Crypto from 'expo-crypto';
 import * as SecureStore from 'expo-secure-store';
 
-const DEVICE_ID_KEY = 'froggo.deviceId';
+const DEVICE_ID_KEY = 'deadLinesInc.deviceId';
 
 // expo-secure-store has no web implementation, so fall back to localStorage
 // there. It's a non-sensitive anonymous ID either way.

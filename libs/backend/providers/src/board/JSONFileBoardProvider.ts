@@ -2,7 +2,7 @@ import * as path from "node:path";
 
 import * as uuid from 'uuid';
 
-import { BaseBoard, Board, BoardComplexityEnum, BoardStateEnum, boardSchema } from "@froggo/common.models";
+import { BaseBoard, Board, BoardComplexityEnum, BoardStateEnum, boardSchema } from "@dead-lines-inc/common.models";
 
 import { JSONFileProvider } from "../JSONFileProvider";
 import fs from "node:fs";
@@ -54,7 +54,6 @@ export class JSONFileBoardProvider extends JSONFileProvider<Board> {
 
     for (const dir of fs.readdirSync(this.options.storage.rootPath, {withFileTypes: true})) {
       if (!dir) continue;
-      console.log(dir);
       if (typeof dir.isDirectory !== 'function' || !dir.isDirectory()) continue;
       const {name} = dir;
 

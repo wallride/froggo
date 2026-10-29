@@ -2,10 +2,16 @@ import * as z from 'zod/v4';
 
 import { cellSchema, playCellSchema } from './Cell';
 
+// Board is n x n with n targets (one per kind), so n also caps how many cell
+// kinds — colors/textures — a board can use. Bigger boards make cells too small
+// to play on a phone.
+export const MIN_BOARD_SIZE = 5;
+export const MAX_BOARD_SIZE = 12;
+
 // Base Board model that is received from board storage
 export const baseBoardSchema = z
   .object({
-    size: z.number().int().min(5).max(15),
+    size: z.number().int().min(MIN_BOARD_SIZE).max(MAX_BOARD_SIZE),
     cells: z.array(cellSchema)
   })
   .refine((board) => board.cells.length === board.size * board.size, {
@@ -51,8 +57,11 @@ export const boardSchema = baseBoardSchema.safeExtend({
 export type Board = z.infer<typeof boardSchema>;
 
 
-// Board extension in play mode
+// Board extension in play mode. Keeps the originating board's id (needed to
+// report play results back against it) without the rest of Board's
+// admin-only metadata (createdAt/state/complexity/stats).
 export const playBoardSchema = baseBoardSchema.safeExtend({
+  id: z.string(),
   cells: z.array(playCellSchema)
 })
 export type PlayBoard = z.infer<typeof playBoardSchema>;

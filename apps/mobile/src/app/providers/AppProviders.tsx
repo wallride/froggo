@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 
-import { PlayerProvider } from '../../identity/player-context';
+import { ConfigurationProvider } from '../../configuration/configuration-context';
 
 export function AppProviders({ children }: PropsWithChildren) {
-  return <PlayerProvider>{children}</PlayerProvider>;
+  return <ConfigurationProvider>{children}</ConfigurationProvider>;
 }

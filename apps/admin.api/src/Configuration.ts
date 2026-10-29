@@ -1,6 +1,6 @@
 import * as z from "zod/v4";
 
-import * as providers from '@froggo/backend.providers';
+import * as providers from '@dead-lines-inc/backend.providers';
 
 export const configurationSchema = z.object({
   dependencies: z.object({

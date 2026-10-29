@@ -1,8 +1,8 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
-import { board } from '@froggo/backend.providers';
-import { Board, BaseBoard } from '@froggo/common.models';
-import { IBoardAPI } from '@froggo/common.api.admin';
+import { board } from '@dead-lines-inc/backend.providers';
+import { Board, BaseBoard } from '@dead-lines-inc/common.models';
+import { IBoardAPI } from '@dead-lines-inc/common.api.admin';
 
 import { Configuration } from '../../Configuration';
 import { CONFIGURATION } from '../configuration/configuration.module';

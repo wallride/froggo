@@ -1,16 +1,14 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Board, BoardStateEnum } from '@froggo/common.models';
+import { Board, BoardStateEnum, MAX_BOARD_SIZE, MIN_BOARD_SIZE } from '@dead-lines-inc/common.models';
 
 import { useApi } from '../../../api/api-context';
 import styles from './boards.module.css';
 
-const MIN_SIZE = 5;
-const MAX_SIZE = 15;
 const SIZES = Array.from(
-  { length: MAX_SIZE - MIN_SIZE + 1 },
-  (_, i) => MIN_SIZE + i,
+  { length: MAX_BOARD_SIZE - MIN_BOARD_SIZE + 1 },
+  (_, i) => MIN_BOARD_SIZE + i,
 );
 
 const STATE_GROUP_ORDER = [
@@ -22,7 +20,7 @@ const STATE_GROUP_ORDER = [
 export function Boards() {
   const { boards: boardApi } = useApi();
   const [boards, setBoards] = useState<Board[]>([]);
-  const [selectedSize, setSelectedSize] = useState<number>(MIN_SIZE);
+  const [selectedSize, setSelectedSize] = useState<number>(MIN_BOARD_SIZE);
 
   useEffect(() => {
     boardApi.getAll().then(setBoards);
@@ -47,6 +45,7 @@ export function Boards() {
   return (
     <div>
       <h1>Boards</h1>
+      <Link to={`/boards/add?size=${selectedSize}`}>Add</Link>
       <div className={styles['tabs']}>
         {SIZES.map((size) => (
           <button
@@ -70,13 +69,14 @@ export function Boards() {
             <th>Avg Score</th>
             <th>Avg Stars</th>
             <th>Avg Time</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {groupedBoards.map(({ state, boards: group }) => (
             <Fragment key={state}>
               <tr>
-                <th className={styles['groupHeader']} colSpan={6}>
+                <th className={styles['groupHeader']} colSpan={7}>
                   {state}
                 </th>
               </tr>
@@ -90,6 +90,9 @@ export function Boards() {
                   <td>{board.stats.avgScore.toFixed(2)}</td>
                   <td>{board.stats.avgStars.toFixed(2)}</td>
                   <td>{board.stats.avgTime.toFixed(2)}</td>
+                  <td>
+                    <Link to={`/boards/edit?id=${board.id}`}>Edit</Link>
+                  </td>
                 </tr>
               ))}
             </Fragment>

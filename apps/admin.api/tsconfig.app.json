@@ -6,6 +6,10 @@
     "types": ["node"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    // The helpers go into the bundle: the release's package.json (generated
+    // from the imports) wouldn't have tslib.
+    "importHelpers": false,
+    "noEmitHelpers": false,
     "target": "es2021",
     "moduleResolution": "nodenext",
     "strictNullChecks": true,

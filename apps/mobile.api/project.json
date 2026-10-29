@@ -54,8 +54,7 @@
       "dependsOn": ["build"],
       "options": {
         "buildTarget": "mobile.api:build",
-        "runBuildTargetDependencies": false,
-        "args": ["--config=.mount/cfg/mobile-api-configuration.json"]
+        "runBuildTargetDependencies": false
       },
       "configurations": {
         "development": {
@@ -72,6 +71,13 @@
       "options": {
         "jestConfig": "apps/mobile.api/jest.config.ts",
         "passWithNoTests": true
+      }
+    },
+    "release": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "semantic-release --no-ci --extends ./apps/mobile.api/release.config.mjs",
+        "cwd": "{workspaceRoot}"
       }
     }
   }

@@ -17,5 +17,12 @@
 
 .target {
   font-weight: bold;
-  text-decoration: underline;
+  color: #ffffff;
+  text-shadow: #000000 0 0 1px;
+}
+
+.unsuitable {
+  color: #c00;
+  font-weight: bold;
+  opacity: 0.6;
 }

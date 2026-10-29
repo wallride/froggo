@@ -8,7 +8,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 
-import { BaseBoard, Board, baseBoardSchema, boardSchema } from '@froggo/common.models';
+import { BaseBoard, Board, baseBoardSchema, boardSchema } from '@dead-lines-inc/common.models';
 
 import { ZodValidationPipe } from '../common/zod-validation.pipe';
 import { BoardsService } from './boards.service';

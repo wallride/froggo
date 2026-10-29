@@ -1,16 +1,26 @@
 import { PropsWithChildren } from 'react';
 
 import { usePlayer } from '../identity/player-context';
-import { LoadingScreen } from '../screens/LoadingScreen';
+import { Onboarding } from '../onboarding/Onboarding';
+import { useStartupStage } from '../startup/startup-progress';
 
-// Shows the loading screen while the player is being resolved from local
-// storage or freshly identified against the API, and only reveals the app
-// once that's done.
+// Holds the app back while the player is being identified against the API
+// (the startup screen is shown meanwhile, with the error if it fails),
+// onboards a user who has no player yet or hasn't gone through the
+// onboarding (it ends by registering them, if need be, and marking them
+// onboarded), and only reveals the app once there is an onboarded player.
 export function PlayerGate({ children }: PropsWithChildren) {
-  const { player, loading, error } = usePlayer();
+  const { player, loading, error, retry } = usePlayer();
+  const identified = !loading && !error;
+  useStartupStage('player', identified, error, retry);
+  // Onboarding comes first instead of the home screen: no home screen data
+  // to wait for.
+  useStartupStage('home', identified && !player?.isOnboarded);
 
-  if (loading || error || !player) {
-    return <LoadingScreen error={error} />;
+  if (!identified) return null;
+
+  if (!player?.isOnboarded) {
+    return <Onboarding />;
   }
 
   return children;

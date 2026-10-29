@@ -1,11 +1,694 @@
 {
   "dependencies": {
-    "playerProvider": {
+    "boardProvider": {
       "storage": {
-        "rootPath": ".mount/storages/players",
+        "rootPath": ".mount/storages/boards",
         "filePatternRegExp": ".+\\.json"
       },
       "space": 2
+    },
+    "mongo": {
+      "database": "deadLinesInc"
+    },
+    "challengeProvider": {
+      "collectionName": "challenges"
+    },
+    "challengeParticipationProvider": {
+      "collectionName": "challengeParticipations"
+    },
+    "playHistoryProvider": {
+      "collectionName": "playHistories"
+    },
+    "playProvider": {
+      "collectionName": "plays"
+    },
+    "playerProvider": {
+      "collectionName": "players"
+    },
+    "playerAvatarsProvider": {
+      "collectionName": "playerAvatars"
+    }
+  },
+  "auth": {
+    "accessTokenTtlMinutes": 1440
+  },
+  "maxChallengeParticipators": 10,
+  "challengeDuration": {
+    "hours": 0,
+    "minutes": 5
+  },
+  "challengeBots": {
+    "enabled": true,
+    "participators": {
+      "min": 4,
+      "max": 8
+    },
+    "playTimeSeconds": {
+      "min": 30,
+      "max": 90
+    }
+  },
+  "assets": {
+    "rootPath": ".mount/assets"
+  },
+  "avatarPool": {
+    "common": [
+      "avatar_65_common.png",
+      "avatar_67_common.png",
+      "avatar_70_common.png",
+      "avatar_71_common.png",
+      "avatar_72_common.png",
+      "avatar_73_common.png",
+      "avatar_75_common.png",
+      "avatar_77_common.png"
+    ],
+    "rare": [
+      "avatar_74_rare.png",
+      "avatar_78_rare.png",
+      "avatar_79_rare.png",
+      "avatar_80_rare.png",
+      "avatar_81_rare.png",
+      "avatar_89_rare.png",
+      "avatar_93_rare.png",
+      "avatar_94_rare.png"
+    ],
+    "epic": [
+      "avatar_66_epic.png",
+      "avatar_68_epic.png",
+      "avatar_69_epic.png",
+      "avatar_76_epic.png",
+      "avatar_82_epic.png",
+      "avatar_83_epic.png",
+      "avatar_86_epic.png",
+      "avatar_92_epic.png"
+    ],
+    "legendary": [
+      "avatar_84_legendary.png",
+      "avatar_85_legendary.png",
+      "avatar_87_legendary.png",
+      "avatar_88_legendary.png",
+      "avatar_90_legendary.png",
+      "avatar_91_legendary.png"
+    ]
+  },
+  "mobileConfiguration": {
+    "api": {
+      "routes": {
+        "identifyPlayer": "/api/players/identify",
+        "registerPlayer": "/api/players/register",
+        "activeChallenges": "/api/plays/active-challenges",
+        "joinChallenge": "/api/plays/join-challenge",
+        "startPlay": "/api/plays/start",
+        "acceptPlayResults": "/api/plays/accept-results",
+        "leaderboard": "/api/plays/leaderboard",
+        "setPlayerAvatar": "/api/players/set-avatar",
+        "setPlayerName": "/api/players/set-name",
+        "completeOnboarding": "/api/players/complete-onboarding"
+      }
+    },
+    "ads": {
+      "penaltyAdUnitId": {
+        "android": "demo-interstitial-yandex",
+        "ios": "demo-interstitial-yandex"
+      }
+    },
+    "languages": [
+      {
+        "code": "en",
+        "name": "English"
+      },
+      {
+        "code": "ru",
+        "name": "Русский"
+      }
+    ],
+    "texts": {
+      "common": {
+        "play": {
+          "en": "Play →",
+          "ru": [
+            "Играть →",
+            "Играть →",
+            "Играть →",
+            "За дело! →",
+            "За дело! →",
+            "Погнали! →",
+            "Погнали! →",
+            "Приступить →",
+            "Вперёд! →"
+          ]
+        },
+        "goHome": {
+          "en": "Go home",
+          "ru": "Домой"
+        },
+        "playNext": {
+          "en": "Play next",
+          "ru": [
+            "Дальше",
+            "Продолжить",
+            "Давай ещё!"
+          ]
+        },
+        "continue": {
+          "en": "Continue",
+          "ru": "Продолжить"
+        },
+        "loading": {
+          "en": "Loading…",
+          "ru": "Загрузка…"
+        },
+        "secondsShort": {
+          "en": "{seconds}s",
+          "ru": "{seconds} с"
+        }
+      },
+      "death": {
+        "tag": {
+          "en": "DEATH · CEO",
+          "ru": "СМЕРТЬ · CEO"
+        },
+        "welcome": {
+          "en": [
+            "There's a queue for everything. Move it!",
+            "Who's going to make my quarterly report less depressing?",
+            "Deadlines don't meet themselves. Believe me, I've checked.",
+            "Time waits for no one. Some employees apparently expect an exception.",
+            "The plan is on fire. Not my problem. Yet.",
+            "One more soul. One more line item.",
+            "Let's see what our little intern can do.",
+            "Pick up the pace. Eternity isn't infinite. Wait...",
+            "How's the work going? Speak up. I can read minds. On a good day.",
+            "Everything's under control. The parts that aren't are being ignored.",
+            "I'd say well done, but I don't want to set a precedent.",
+            "The report looks excellent. Especially the fictional parts.",
+            "Error rates are up. Nice to see someone hitting their targets.",
+
+            "Time off? Submit a request for your next life.",
+            "Lunch break? That's for the living. Back to work.",
+            "I'm on a well-earned vacation. You're on a well-earned probation period.",
+            "Don't worry, I'm keeping an eye on you. Even from the beach.",
+            "Don't call me about minor issues. That's what work email is for.",
+            "I've switched off my work phone. Somehow, your number still gets through.",
+            "Good news: I'm not coming back today. The bad news should be obvious.",
+            "I sent you a postcard. The back has your task list.",
+            "Rest is important. That's why I'm resting and you're working.",
+            "You're doing great. I haven't even had to fire you yet.",
+            "My vacation is going wonderfully. I hope yours isn't.",
+            "Initiative is encouraged. Preferably someone else's.",
+
+            "The queue won't get shorter just because you glare at it.",
+            "Four thousand souls. Not one of them filed a complaint correctly.",
+            "Please remain calm. Panicking is management's job.",
+            "Next! And let's keep the existential questions to a minimum.",
+            "Every queue has a beginning, an end, and a baffling amount of paperwork.",
+            "Who's last? Never mind. Everyone ends up last eventually.",
+            "Don't lose your ticket. Reissuing it takes an eternity.",
+            "The line is moving. Slowly, but at least it's moving in the right direction.",
+            "The queue's especially long today. Must be Monday.",
+            "Welcome to Dead Lines Inc. Your patience is already under review.",
+
+            "Everyone has a purpose. Yours is currently listed under miscellaneous duties.",
+            "Death and taxes. And apparently quarterly performance reviews.",
+            "I'm not heartless. I simply don't have a heart. Entirely different issue.",
+            "Don't take things to heart. Especially if it's still beating.",
+            "I've seen the end of the world. Nobody filed the proper paperwork there, either.",
+            "Everything ends eventually. Except your probation period.",
+            "Eternity is a long time. Just not long enough to put up with bad work.",
+            "Immortality is overrated. Especially when there's bookkeeping to do.",
+            "Everyone's equal in the afterlife. Except those who know how to fill out forms.",
+            "I'm not threatening you. I'm reminding you that resources are finite.",
+            "My sense of humour is excellent. It's just been dead for centuries.",
+            "You'd be amazed how many people die before finishing what they started.",
+            "Some things shouldn't be put off. I've tested this theory.",
+            "Every closed case creates a new one. It's like a cursed filing cabinet.",
+            "Life is short. Somehow, the workday isn't.",
+
+            "I have high hopes for you. Don't make me bury them.",
+            "You're learning fast. Compared to the furniture.",
+            "You have tremendous potential. It's buried pretty deep.",
+            "Don't be afraid to make mistakes. Be afraid to repeat them on official paperwork.",
+            "I'd show you how it's done, but then why would I need an intern?",
+            "Very productive today. Or is that yesterday's report?",
+            "I can see progress. Mostly in the number of excuses.",
+            "Don't sweat the small stuff. Like your career prospects.",
+            "A good employee knows what to do. A great one documents it in triplicate.",
+            "Your work is getting noticed. Unfortunately, for all the wrong reasons.",
+            "Don't confuse being busy with being productive. I made that mistake once.",
+            "Keep practising and I might trust you with the stapler.",
+            "I like your enthusiasm. It's adorable watching it fade.",
+            "Career advancement guaranteed. Direction depends on performance.",
+            "Keep up the good work. I haven't decided what kind of good yet.",
+
+            "Form 13-B. Eternity doesn't start without it.",
+            "Please don't lose the paperwork. I already lost one intern that way.",
+            "Applications for a second life require proof of a first.",
+            "The system is operating normally. The system has a terrible sense of humour.",
+            "We care about every soul. Especially the ones with complaints attached.",
+            "Your call is important to us. So is the queue ahead of you.",
+            "Please don't feed the ghosts. They already have enough trouble with portion control.",
+            "In the event of a system failure, remain calm. In the event of the apocalypse, contact management.",
+            "Remember to back up your files. Souls don't enjoy disappearing twice.",
+            "IT is looking into it. They've been looking into it for three hundred years.",
+            "At Dead Lines Inc., no problem is unsolvable. Some just require a 48-page form.",
+            "Questions for management may be directed to the void. It usually gets back first."
+          ],
+          "ru": [
+            "Тут повсюду очереди! Шевелись!",
+            "Ну и кто меня порадует хорошим отчётом?",
+            "Дедлайн сам себя не закроет. Хотя я надеялся.",
+            "Время не ждёт. В отличие от некоторых сотрудников.",
+            "План горит. Впрочем, это не моя проблема. Пока.",
+            "Ещё одна душа. Ещё одна строчка в отчёте.",
+            "Покажи-ка мне, на что способен наш маленький стажёр.",
+            "Работаем быстрее. Вечность не резиновая.",
+            "Как продвигается работа? Не молчи, я умею читать мысли. Иногда.",
+            "Всё под контролем. Кроме того, что не под контролем.",
+            "Я бы сказал «молодец», но не хочу создавать прецедент.",
+            "В отчёте всё прекрасно. Особенно раздел с выдумками.",
+            "Количество ошибок растёт. Приятно видеть стабильность.",
+
+            "Отпуск? Поговорим об этом в твоей следующей жизни. Ха!",
+            "Перерыв на обед? Это удел смертных! Возвращайся к работе.",
+            "Я на заслуженном отдыхе. Ты на заслуженном испытательном сроке.",
+            "Не волнуйся, я за тобой наблюдаю. Даже с пляжа.",
+            "Не звони мне по пустякам. Для этого есть служебная почта.",
+            "Я отключил рабочий телефон. Твой номер, разумеется, остался.",
+            "Хорошие новости: я не вернусь сегодня. Плохие новости очевидны.",
+            "Я прислал тебе открытку. На обратной стороне список задач.",
+            "Отдыхать полезно. Именно поэтому отдыхаю я, а работаешь ты.",
+            "Ты справляешься прекрасно. Мне даже не пришлось увольнять тебя.",
+            "Мой отпуск идёт отлично. Надеюсь, у тебя всё наоборот.",
+            "Помни: инициативность приветствуется. Особенно чужая.",
+
+            "Очередь не становится короче от того, что ты на неё смотришь.",
+            "Четыре тысячи душ. И ни одной жалобы по правильной форме.",
+            "Пожалуйста, сохраняй спокойствие. Паниковать здесь положено только мне.",
+            "Следующий! И пусть на этот раз без вопросов о смысле жизни.",
+            "У очереди есть начало, конец и крайне сомнительная организация.",
+            "Кто последний? Неважно. Здесь все в конечном итоге последние.",
+            "Номерок не теряй. Восстанавливать его придётся целую вечность.",
+            "Очередь движется. Медленно, но хотя бы в правильном направлении.",
+            "Сегодня очередь особенно длинная. Понедельник, должно быть.",
+            "Добро пожаловать в Dead Lines Inc. Ваше терпение уже проверяется.",
+
+            "У каждого есть своё предназначение. У тебя пока только должностная инструкция.",
+            "Смерть и налоги. И, судя по всему, ещё квартальные отчёты.",
+            "Я не бессердечный. Просто у меня нет сердца. Это разные вещи.",
+            "Не принимай всё близко к сердцу. Особенно если оно ещё бьётся.",
+            "Я видел конец света. Там тоже никто не заполнил форму заявки.",
+            "Всё когда-нибудь заканчивается. Кроме твоего испытательного срока.",
+            "Вечность долгая. Но не настолько, чтобы терпеть плохую работу.",
+            "Бессмертие переоценено. Особенно когда нужно вести бухгалтерию.",
+            "На том свете все равны. Кроме тех, кто умеет заполнять документы.",
+            "Я не угрожаю. Я просто напоминаю о конечности ресурсов.",
+            "У меня чувство юмора отличное. Просто оно уже умерло.",
+            "Ты бы удивился, сколько людей умирает, не закончив начатое.",
+            "Некоторые дела лучше не откладывать. Я проверял.",
+            "Помни: за каждым закрытым делом стоит новое открытое дело.",
+            "Жизнь коротка. Рабочий день почему-то нет.",
+
+            "Я возлагаю на тебя большие надежды. Не заставляй меня их хоронить.",
+            "Ты быстро учишься. По сравнению с мебелью.",
+            "У тебя огромный потенциал. Где-то очень глубоко.",
+            "Не бойся ошибаться. Бойся повторять ошибки в официальных документах.",
+            "Я бы показал, как надо, но тогда зачем мне стажёр?",
+            "Ты сегодня продуктивен. Или это вчерашний отчёт?",
+            "Вижу прогресс. Правда, пока только в количестве оправданий.",
+            "Не переживай из-за мелочей. Например, из-за своей карьеры.",
+            "Хороший сотрудник знает, что делать. Отличный умеет это документировать.",
+            "Твоя работа заметна. К сожалению, не в том смысле.",
+            "Не путай занятость с продуктивностью. Я однажды тоже так ошибся.",
+            "Ещё немного практики, и тебе можно будет доверить степлер.",
+            "Мне нравится твой энтузиазм. Он так забавно угасает.",
+            "Карьерный рост гарантирован. Направление зависит от результатов.",
+            "Продолжай в том же духе. Я пока не решил, в каком именно.",
+
+            "Форма 13-Б. Без неё даже вечность не начинается.",
+            "Пожалуйста, не теряй документы. Мне уже пришлось потерять одного стажёра.",
+            "Заявление на вторую жизнь принимается только при наличии первой.",
+            "Система работает штатно. Это у системы такое чувство юмора.",
+            "Мы заботимся о каждой душе. Особенно о той, на которую есть жалоба.",
+            "Ваше обращение очень важно для нас. Очередь перед вами тоже.",
+            "Пожалуйста, не кормите призраков. Они и так плохо соблюдают диету.",
+            "В случае сбоя сохраняйте спокойствие. В случае апокалипсиса обратитесь к руководству.",
+            "Не забывай делать резервные копии. Души не любят исчезать дважды.",
+            "Технический отдел уже занимается проблемой. Уже триста лет занимается.",
+            "В Dead Lines Inc. нет нерешаемых проблем. Есть формы на 48 страниц.",
+            "Вопросы к руководству можно направлять в пустоту. Она обычно отвечает первой."
+          ]
+        },
+        "playWon": {
+          "en": [
+            "Quota met. Don't get used to the feeling.",
+            "Souls processed, paperwork pending. Fine work.",
+            "The queue moves. I'll allow myself a smile. Once.",
+            "Efficient. HR will hear about this, unfortunately for you."
+          ],
+          "ru": [
+            "План выполнен. Не привыкай к этому чувству.",
+            "Души обработаны, бумажки в пути. Отличная работа.",
+            "Очередь движется. Позволю себе улыбку. Одну.",
+            "Эффективно. Отдел кадров об этом узнает — к твоему сожалению."
+          ]
+        },
+        "playLost": {
+          "en": [
+            "The living remain living. My least favorite outcome.",
+            "A setback. The souls will simply wait a little longer.",
+            "That's coming out of your performance review.",
+            "Try again before the paperwork notices."
+          ],
+          "ru": [
+            "Живые остаются живыми. Мой нелюбимый исход.",
+            "Заминка. Души просто подождут ещё немного.",
+            "Это войдёт в твою квартальную оценку.",
+            "Попробуй ещё раз, пока бумаги не заметили."
+          ]
+        }
+      },
+      "onboarding": {
+        "invitation": {
+          "welcome": {
+            "en": "Welcome to the afterlife corporation!",
+            "ru": "Добро пожаловать в корпорацию!"
+          },
+          "message": {
+            "en": "We save the souls of the departed here and we're rather busy.\nBut if you want to join our ranks, I'll give you a test assignment.",
+            "ru": "Мы здесь спасаем души усопших и довольно заняты.\nНо если ты хочешь вступить в наши ряды, то я дам тебе тестовое задание."
+          },
+          "signature": {
+            "en": "Death · CEO",
+            "ru": "Смерть · CEO"
+          },
+          "getStarted": {
+            "en": "GET STARTED →",
+            "ru": "ПОПРОБОВАТЬ →"
+          }
+        },
+        "tutorial": {
+          "steps": {
+            "board": {
+              "en": "Five souls are lost on the board — one in each color.",
+              "ru": "На игровом поле потеряно 5 душ. По одной на каждом цвете."
+            },
+            "findFirst": {
+              "en": "That one's obvious! Double-tap to save a lost soul.",
+              "ru": "Это же очевидно! Коснись дважды, чтобы спасти потерянную душу."
+            },
+            "markNeighbours": {
+              "en": "There's a rule: souls can't hide in neighbouring cells. Tap once to mark a cell as empty.",
+              "ru": "Есть правило: души не могут прятаться на соседних клетках. Коснись один раз, чтобы отметить пустую клетку."
+            },
+            "markLines": {
+              "en": "They can't hide in the same row or column either.",
+              "ru": "А ещё они не могут прятаться в той же строке или столбце."
+            },
+            "findMore": {
+              "en": "Keep looking for the lost souls and marking the empty cells.",
+              "ru": "Продолжай искать потеряшек и отмечать пустые клетки."
+            },
+            "findRest": {
+              "en": "Find them all and you're done! It's easier than it looks.",
+              "ru": "Найди их всех, и ты справишься! Это проще, чем кажется."
+            }
+          },
+          "next": {
+            "en": [
+              "Next →",
+              "What's more? →",
+              "Ok, got it →",
+              "All right. Next! →"
+            ],
+            "ru": [
+              "Дальше →",
+              "Что ещё? →",
+              "Ок, понятно →",
+              "Ладно →"
+            ]
+          },
+          "finish": {
+            "en": "Start working →",
+            "ru": "Приступить к работе →"
+          }
+        }
+      },
+      "home": {
+        "profileRank": {
+          "en": "New Recruit · {rank} globally",
+          "ru": "Новичок · {rank} в мире"
+        }
+      },
+      "modes": {
+        "score": {
+          "label": {
+            "en": "Quota mode",
+            "ru": "Выполнение плана"
+          },
+          "description": {
+            "en": "Fewest marks wins. Daily event.",
+            "ru": "Точность и аккуратность идут в плюс."
+          }
+        },
+        "time": {
+          "label": {
+            "en": "Rush processing",
+            "ru": "Авральный режим"
+          },
+          "description": {
+            "en": "Fastest time wins. Daily event.",
+            "ru": "Чем быстрее, тем лучше!"
+          }
+        },
+        "accuracy": {
+          "label": {
+            "en": "Accuracy",
+            "ru": "Точность"
+          },
+          "description": {
+            "en": "No room for error.",
+            "ru": "Без права на ошибку"
+          }
+        },
+        "freePlay": {
+          "label": {
+            "en": "Overtime",
+            "ru": "Сверхурочная работа"
+          },
+          "description": {
+            "en": "Unpaid, unlogged, and frankly unhinged.",
+            "ru": "К тому же неоплачиваемая."
+          },
+          "footnote": {
+            "en": "Off the books · Unlimited · No record kept",
+            "ru": "Вне отчётности · Без ограничений · Без записи"
+          }
+        },
+        "timeLeft": {
+          "en": "{hours}h {minutes}m left",
+          "ru": "{hours} ч {minutes} м"
+        },
+        "finished": {
+          "en": "Finished",
+          "ru": "Завершено"
+        }
+      },
+      "playBoard": {
+        "giveUp": {
+          "en": "Give up",
+          "ru": "Сдаться"
+        },
+        "soulsSaved": {
+          "en": "{found}/{total}",
+          "ru": "{found}/{total}"
+        }
+      },
+      "playResult": {
+        "won": {
+          "en": "You win!",
+          "ru": "Победа!"
+        },
+        "lost": {
+          "en": "Game over",
+          "ru": "Это провал"
+        },
+        "soulsSaved": {
+          "en": "Souls saved",
+          "ru": "Спасено душ"
+        },
+        "stars": {
+          "en": "Stars",
+          "ru": "Звёзды"
+        },
+        "time": {
+          "en": "Time",
+          "ru": "Время"
+        },
+        "score": {
+          "en": "Score",
+          "ru": "Очки"
+        },
+        "bonus": {
+          "en": "bonus:",
+          "ru": "бонус:"
+        }
+      },
+      "leaderboard": {
+        "title": {
+          "en": "Leaderboard",
+          "ru": "Таблица лидеров"
+        },
+        "online": {
+          "en": "online",
+          "ru": "онлайн"
+        },
+        "lastSeenMinutes": {
+          "en": "{minutes} min ago",
+          "ru": "{minutes} мин назад"
+        },
+        "lastSeenHours": {
+          "en": "{hours} h {minutes} min ago",
+          "ru": "{hours} ч {minutes} мин назад"
+        }
+      },
+      "challengeResult": {
+        "title": {
+          "en": "Task complete",
+          "ru": "Задание завершено"
+        },
+        "place": {
+          "en": "Place",
+          "ru": "Место"
+        },
+        "score": {
+          "en": "Score",
+          "ru": "Очки"
+        },
+        "avgTime": {
+          "en": "Average time",
+          "ru": "Среднее время"
+        },
+        "boardsWon": {
+          "en": "Boards solved",
+          "ru": "Решено досок"
+        },
+        "newTask": {
+          "en": "New task",
+          "ru": "Новое задание"
+        }
+      },
+      "penalty": {
+        "title": {
+          "en": "Disciplinary hearing",
+          "ru": "Дисциплинарное взыскание"
+        },
+        "description": {
+          "en": "Mistakes were made. Sit through this message from our sponsors.",
+          "ru": "Ошибки не прощаются. Посмотри сообщение от наших спонсоров."
+        }
+      },
+      "screens": {
+        "archive": {
+          "title": {
+            "en": "Archive",
+            "ru": "Архив"
+          },
+          "description": {
+            "en": "The soul collection is coming soon.",
+            "ru": "Коллекция душ скоро появится."
+          }
+        },
+        "dailyTasks": {
+          "title": {
+            "en": "Daily tasks",
+            "ru": "Ежедневные задания"
+          },
+          "description": {
+            "en": "Daily task tracking is coming soon.",
+            "ru": "Отслеживание заданий скоро появится."
+          }
+        },
+        "settings": {
+          "title": {
+            "en": "Settings",
+            "ru": "Настройки"
+          },
+          "languageHeading": {
+            "en": "Language",
+            "ru": "Язык"
+          }
+        },
+        "profile": {
+          "title": {
+            "en": "Profile",
+            "ru": "Профиль"
+          },
+          "namePlaceholder": {
+            "en": "Your name",
+            "ru": "Твоё имя"
+          },
+          "avatarsHeading": {
+            "en": "Avatars",
+            "ru": "Аватары"
+          },
+          "rarity": {
+            "common": {
+              "en": "Common",
+              "ru": "Обычные"
+            },
+            "rare": {
+              "en": "Rare",
+              "ru": "Редкие"
+            },
+            "epic": {
+              "en": "Epic",
+              "ru": "Эпические"
+            },
+            "legendary": {
+              "en": "Legendary",
+              "ru": "Легендарные"
+            }
+          }
+        }
+      },
+      "errors": {
+        "identifyPlayer": {
+          "en": "Failed to identify player",
+          "ru": "Не удалось определить игрока"
+        },
+        "registerPlayer": {
+          "en": "Failed to create player",
+          "ru": "Не удалось создать игрока"
+        },
+        "loadHome": {
+          "en": "Failed to load home screen",
+          "ru": "Не удалось загрузить главный экран"
+        },
+        "startPlay": {
+          "en": "Failed to start play",
+          "ru": "Не удалось начать игру"
+        },
+        "loadLeaderboard": {
+          "en": "Failed to load leaderboard",
+          "ru": "Не удалось загрузить таблицу лидеров"
+        },
+        "joinChallenge": {
+          "en": "Failed to get a new task",
+          "ru": "Не удалось получить новое задание"
+        },
+        "changeLanguage": {
+          "en": "Failed to change language",
+          "ru": "Не удалось сменить язык"
+        },
+        "setPlayerAvatar": {
+          "en": "Failed to change avatar",
+          "ru": "Не удалось сменить аватар"
+        },
+        "setPlayerName": {
+          "en": "Failed to change name",
+          "ru": "Не удалось сменить имя"
+        }
+      }
     }
   }
 }

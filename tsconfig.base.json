@@ -22,19 +22,19 @@
     "noFallthroughCasesInSwitch": true,
     "noPropertyAccessFromIndexSignature": true,
     "paths": {
-      "@froggo/common.models": [
+      "@dead-lines-inc/common.models": [
         "libs/common/models/src/index.ts"
       ],
-      "@froggo/backend.providers": [
+      "@dead-lines-inc/backend.providers": [
         "libs/backend/providers/src/index.ts"
       ],
-      "@froggo/common.api.admin": [
+      "@dead-lines-inc/common.api.admin": [
         "libs/common/api/admin/src/index.ts"
       ],
-      "@froggo/frontend": [
+      "@dead-lines-inc/frontend": [
         "libs/frontend/src/index.ts"
       ],
-      "@froggo/common.api.mobile": [
+      "@dead-lines-inc/common.api.mobile": [
         "libs/common/api/mobile/src/index.ts"
       ]
     }

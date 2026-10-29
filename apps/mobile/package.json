@@ -8,9 +8,15 @@
   "dependencies": {
     "@expo/metro": "*",
     "@expo/vector-icons": "*",
+    "@react-navigation/native": "*",
+    "@react-navigation/native-stack": "*",
     "@testing-library/react-native": "*",
     "expo": "*",
+    "expo-asset": "*",
     "expo-crypto": "*",
+    "expo-file-system": "*",
+    "expo-image": "*",
+    "expo-localization": "*",
     "expo-secure-store": "*",
     "expo-splash-screen": "*",
     "expo-status-bar": "*",
@@ -18,8 +24,13 @@
     "jest-expo": "*",
     "react": "*",
     "react-native": "*",
+    "react-native-reanimated": "*",
+    "react-native-safe-area-context": "*",
+    "react-native-screens": "*",
     "react-native-svg": "*",
     "react-native-svg-transformer": "*",
-    "react-native-web": "*"
+    "react-native-web": "*",
+    "react-native-worklets": "*",
+    "yandex-mobile-ads": "*"
   }
 }

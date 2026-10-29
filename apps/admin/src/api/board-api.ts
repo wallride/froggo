@@ -1,12 +1,12 @@
 import * as z from 'zod/v4';
 
-import { IBoardAPI } from '@froggo/common.api.admin';
+import { IBoardAPI } from '@dead-lines-inc/common.api.admin';
 import {
   BaseBoard,
   Board,
   baseBoardSchema,
   boardSchema,
-} from '@froggo/common.models';
+} from '@dead-lines-inc/common.models';
 
 import { API_BASE_URL } from './api-config';
 

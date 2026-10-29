@@ -1,4 +1,4 @@
-import { Board, BaseBoard } from '@froggo/common.models';
+import { Board, BaseBoard } from '@dead-lines-inc/common.models';
 
 export interface IBoardAPI {
   add(board: BaseBoard): Promise<Board>

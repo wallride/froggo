@@ -52,7 +52,7 @@ export default [
           ],
           pathGroups: [
             {
-              pattern: '@froggo/**',
+              pattern: '@dead-lines-inc/**',
               group: 'internal',
             },
           ],

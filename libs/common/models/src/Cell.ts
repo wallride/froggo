@@ -2,6 +2,7 @@ import * as z from 'zod/v4';
 
 // Base Cell model that is stored in the board storage
 export const cellSchema = z.object({
+  key: z.number().int(),
   kind: z.number(),
   hasTarget: z.boolean().optional()
 });

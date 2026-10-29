@@ -1,4 +1,4 @@
-import { BaseBoard, Board } from "@froggo/common.models";
+import { BaseBoard, Board } from "@dead-lines-inc/common.models";
 
 // API provider for Board models. Used by higher level APIs on backend
 export interface IBoardProvider {
