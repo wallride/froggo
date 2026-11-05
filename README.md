@@ -1,25 +1,29 @@
 # Dead Lines Inc.
 
-Dead Lines Inc. is a puzzle game platform built as a TypeScript monorepo.
+Dead Lines Inc. is a puzzle game platform built as a TypeScript monorepo:
+a mobile game, two backend APIs and a web admin panel.
 
 ## Stack
 
-- Nx
-- pnpm
-- TypeScript
-- Expo (planned)
-- NestJS (planned)
-- PostgreSQL (planned)
+- Nx (integrated monorepo), pnpm, TypeScript strict, Node.js 24.11
+- Expo / React Native (mobile), React + Vite (admin panel)
+- NestJS (backends), MongoDB via the official driver
 
 ## Workspace
 
 ```
-apps/      Applications
-libs/      Shared libraries
+apps/      Applications: mobile, mobile.api, admin.api, admin
+libs/      Shared libraries: common.models, common.api.*, backend.providers, frontend
 docs/      Documentation
-tools/     Project tooling
-docker/    Docker environment
+tools/     Release tooling
+ci/        Docker environments
 ```
+
+## Documentation
+
+Start with [docs/ai-context.md](docs/ai-context.md) — the project map for people and agents.
+Deployment and releases: [docs/deployment.md](docs/deployment.md),
+[docs/reference/release-deploy.md](docs/reference/release-deploy.md).
 
 ## Development
 
@@ -30,11 +34,9 @@ The project follows:
 - Strict TypeScript
 - Framework-independent domain layer
 
-
-## Run/serve commands
 Each backend takes its environment (configuration path, port, secrets) from its own
 `apps/<app>/.env` (not committed); start from `apps/<app>/.env.example`.
-Releases and deployment: [docs/deployment.md](docs/deployment.md).
+
 ```
 npx nx serve mobile.api
 npx nx serve mobile

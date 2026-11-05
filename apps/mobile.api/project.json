@@ -79,6 +79,13 @@
         "command": "semantic-release --no-ci --extends ./apps/mobile.api/release.config.mjs",
         "cwd": "{workspaceRoot}"
       }
+    },
+    "repair-release": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node tools/release/repair-release.mjs mobile.api",
+        "cwd": "{workspaceRoot}"
+      }
     }
   }
 }

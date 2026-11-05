@@ -1,8 +1,10 @@
 // Builds a backend app and packs it as its release archive:
 //   node tools/release/pack-backend.mjs <project> <version>
-// → dist/release/<project>.tar.gz with main.js, package.json (carrying the
-// version) and pnpm-lock.yaml — what the container installs and runs. Run
-// from the workspace root.
+// → dist/release/<project>.tar.gz         stable copy (what the container mounts)
+// → dist/release/<project>-v<version>.tar.gz  the same archive under the name it
+//                                            gets as a GitHub release asset
+// Contents: main.js, package.json (carrying the version) and pnpm-lock.yaml —
+// what the container installs and runs. Run from the workspace root.
 import { execFileSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
@@ -23,6 +25,13 @@ fs.writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`);
 
 const releaseDir = path.join('dist', 'release');
 fs.mkdirSync(releaseDir, { recursive: true });
+
 const archive = path.join(releaseDir, `${project}.tar.gz`);
 execFileSync('tar', ['-czf', archive, '-C', buildDir, '.'], { stdio: 'inherit' });
-console.log(`Packed ${project} ${version}: ${archive}`);
+
+// GitHub names a release asset after the file, so the versioned copy is the one
+// that gets uploaded.
+const versionedArchive = path.join(releaseDir, `${project}-v${version}.tar.gz`);
+fs.copyFileSync(archive, versionedArchive);
+
+console.log(`Packed ${project} ${version}: ${archive}, ${versionedArchive}`);

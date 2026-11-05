@@ -1,0 +1,12 @@
+# Сборка, зависимости и кэш
+node_modules/
+dist/
+build/
+.expo/
+.cache/
+
+# Тяжелые логи и медиа-файлы
+*.log
+*.mp4
+*.png
+*.jpg

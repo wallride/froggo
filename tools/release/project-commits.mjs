@@ -17,8 +17,9 @@ const require = createRequire(import.meta.url);
 const rootsByProject = new Map();
 
 // The project's folder and those of the workspace projects it depends on,
-// directly or not, from the workspace root.
-async function projectRoots(project) {
+// directly or not, from the workspace root. Exported for repair-release.mjs,
+// which rebuilds the notes of a release that has to be recovered by hand.
+export async function projectRoots(project) {
   if (rootsByProject.has(project)) return rootsByProject.get(project);
   // The daemon would keep the release process from exiting.
   process.env.NX_DAEMON = 'false';

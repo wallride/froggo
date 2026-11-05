@@ -5,7 +5,9 @@
     "node": "24.11.1"
   },
   "license": "Proprietary",
-  "scripts": {},
+  "scripts": {
+    "build": "npx nx run-many --target=build --projects=mobile.api,admin.api,admin --parallel=5"
+  },
   "private": true,
   "dependencies": {
     "@expo/metro": "^55.1.1",
@@ -68,7 +70,6 @@
     "@nx/workspace": "23.1.0",
     "@semantic-release/commit-analyzer": "13.0.1",
     "@semantic-release/exec": "7.1.0",
-    "@semantic-release/github": "12.0.10",
     "@semantic-release/release-notes-generator": "14.1.1",
     "@swc/cli": "~0.8.1",
     "@swc/core": "~1.15.5",

@@ -1,0 +1,16 @@
+{
+  "apps": [
+    {
+      "name": "mobile-api",
+      "namespace": "dead-lines",
+      "script": "/app/main.js",
+      "instances": 1,
+      "exec_mode": "cluster",
+      "args": [
+        "--cfg=/app/cfg/configuration.json"
+      ],
+      "watch": ["/app/cfg"],
+      "autorestart": false
+    }
+  ]
+}
