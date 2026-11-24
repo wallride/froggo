@@ -13,13 +13,14 @@ import {
 import { IdentifyPlayer, identifyPlayerSchema, MobileApiConfiguration } from '@dead-lines-inc/common.models';
 
 import { apiUrl } from './api-url';
+import { appFetch } from './app-fetch';
 import { authSession } from './auth-session';
 
 export class PlayerAPI implements IPlayerAPI {
   constructor(private readonly api: MobileApiConfiguration) {}
 
   async identify(request: IdentifyPlayerRequest): Promise<IdentifyPlayerResponse> {
-    const res = await fetch(apiUrl(this.api, 'identifyPlayer'), {
+    const res = await appFetch(apiUrl(this.api, 'identifyPlayer'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(request),
@@ -31,7 +32,7 @@ export class PlayerAPI implements IPlayerAPI {
   }
 
   async register(request: IdentifyPlayerRequest): Promise<PlayerSession> {
-    const res = await fetch(apiUrl(this.api, 'registerPlayer'), {
+    const res = await appFetch(apiUrl(this.api, 'registerPlayer'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(request),

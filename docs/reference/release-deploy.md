@@ -35,11 +35,16 @@ npx nx run admin.api:release
 готовый архив из `dist/release` либо собирает его из помеченного коммита, затем публикует.
 
 Архив: `main.js`, `main.js.map`, `package.json` (точные версии внешних зависимостей),
-`pnpm-lock.yaml` (обрезанный). Ни конфигов, ни секретов. Репозиторий публичный → архив
-скачивается без токена.
+`pnpm-lock.yaml` (обрезанный), `configuration.json` (контентный конфиг из
+`.mount/cfg/<app>-configuration.json`) и `assets/` (только mobile.api, из `.mount/assets`).
+Секретов в архиве нет — они приходят через env. Репозиторий публичный → архив скачивается
+без токена.
 
-Первый релиз приложения — `1.0.0`. Конфиги приложений: `apps/<app>/release.config.mjs` →
-`backendReleaseConfig('<app>')`.
+Первый релиз приложения — `1.0.0`. Конфиг приложения — обычный `apps/<app>/.releaserc.json`
+(`branches`, `tagFormat`, `plugins`; пути к плагинам — от папки приложения). Цель Nx `release`
+запускает `semantic-release` в папке приложения (`cwd: {projectRoot}`), поэтому `--extends`
+нет. Скрипты в `tools/release/` не зависят от `process.cwd()`: корень воркспейса берут из
+`tools/release/workspace.mjs`. Пошаговая инструкция — [../release.md](../release.md).
 
 ## Контейнер (целевая схема)
 
@@ -48,18 +53,18 @@ node:24.11.1-alpine
 1. скачать https://github.com/<owner>/<repo>/releases/download/<app>-v<ver>/<app>-v<ver>.tar.gz
 2. распаковать в /app
 3. npm i -g pnpm@11 && pnpm install --prod --frozen-lockfile
-4. CONFIG_PATH=/data/cfg/<app>-configuration.json node main.js     (PORT по умолчанию 3001/3000)
+4. MONGO_URI=... AUTH_TOKEN_SECRET=... MINIMUM_APP_VERSION=1.0.0 node main.js
+   (PORT по умолчанию 3001/3000; конфиг читается из configuration.json рядом с main.js)
 ```
-Монтирование (см. deployment.md):
 
-| На сервере | В контейнер | mobile.api | admin.api |
-|---|---|---|---|
-| `/srv/dead-lines-inc/cfg` | `/data/cfg` | ro | ro |
-| `/srv/dead-lines-inc/storages` | `/data/storages` | ro | rw (доски) |
-| `/srv/dead-lines-inc/assets` | `/data/assets` | ro | — |
+Ничего не монтируется: конфиг и аватары уже в архиве, доски — в MongoDB (коллекция
+`boards`), остальное — env. Поэтому схема годится и для App Platform Timeweb, у которой
+монтирований нет.
 
-Секреты — только env/секреты хостинга (`MONGO_URI`, `AUTH_TOKEN_SECRET`). Пути в конфигах
-на сервере абсолютные (`/data/...`); локально — `.mount/...`.
+Секреты и переключатели — только env/секреты хостинга (`MONGO_URI`, `AUTH_TOKEN_SECRET`,
+`MINIMUM_APP_VERSION`, `CORS_ALLOWED_ORIGINS`, `ASSETS_ROOT_PATH`, `ASSETS_PUBLIC_BASE_URL`).
+Живость для healthcheck — `GET /api/health` (`{ status: 'ok' }`, без БД и без проверки
+версии приложения).
 
 ## Что уже есть в репозитории
 
@@ -74,8 +79,8 @@ node:24.11.1-alpine
 1. `ci/docker/mobile.api/Dockerfile` скопирован из другого проекта («cah»):
    `pm2-runtime /apps/cfg/pm2.json`, `/home/cah`, `EXPOSE 8080`, `mv /tmp/package /app`,
    `ARG REPOSITORY=git@github.com:wallride/froggo.git`, `npm i --omit=dev`.
-   Не совпадает с deployment.md (`node main.js`, `/data`, pnpm, порт 3001) и не работает
-   с текущим архивом (`/tmp/app.tgz` распаковывается в корень, а не в `package/`).
+   Не совпадает с deployment.md (`node main.js`, pnpm, порт 3001, без монтирований) и не
+   работает с текущим архивом (`/tmp/app.tgz` распаковывается в корень, а не в `package/`).
 2. Имя ассета: публикуется `<app>-v<version>.tar.gz`, Dockerfile ищет `$APP_NAME-$RELEASE.tgz`.
 3. `README.md` в `ci/docker/mobile.api/` описывает старую схему (pm2, 8080, `/apps/cfg`).
 4. `ci/docker/mobile.api/.env.example` дублирует `apps/mobile.api/.env.example`, но говорит
@@ -85,6 +90,9 @@ node:24.11.1-alpine
    актуальное имя репозитория (старое имя проекта в идентификаторах не используется).
 7. Локальные `ci/docker/*/.env` содержат реальные значения — они gitignored, но при переносе
    стенда не должны попасть в коммит.
+
+Закрыто: доски в MongoDB, `/api/health` вне `AppVersionGuard`, конфиг разделён на контент
+(в архиве) и env, аватары запекаются в релиз — контейнеру больше не нужны монтирования.
 
 Решение по стилю запуска (pm2 vs `node main.js`) ещё не зафиксировано: deployment.md и код
 исходят из `node main.js`; если нужен pm2/перезапуск — добавить его осознанно в новый Dockerfile.

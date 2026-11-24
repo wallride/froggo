@@ -1,2 +1,2 @@
 export * from "./IBoardProvider";
-export * from "./JSONFileBoardProvider";
+export * from "./MongoBoardProvider";

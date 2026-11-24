@@ -1,11 +1,10 @@
 {
   "dependencies": {
     "boardProvider": {
-      "storage": {
-        "rootPath": ".mount/storages/boards",
-        "filePatternRegExp": ".+\\.json"
-      },
-      "space": 2
+      "collectionName": "boards"
+    },
+    "mongo": {
+      "database": "deadLinesInc"
     }
   }
 }

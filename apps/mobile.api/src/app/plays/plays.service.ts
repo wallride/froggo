@@ -34,7 +34,6 @@ const CHALLENGE_TYPES = [PlayTypeEnum.score, PlayTypeEnum.time, PlayTypeEnum.acc
 // IPlayAPI on the server, acting on behalf of the authenticated player.
 @Injectable()
 export class PlaysService {
-  private readonly boardProvider: board.JSONFileBoardProvider;
   private readonly challengeProvider: play.MongoChallengeProvider;
   private readonly participationProvider: play.MongoChallengeParticipationProvider;
   private readonly playHistoryProvider: play.MongoPlayHistoryProvider;
@@ -48,11 +47,8 @@ export class PlaysService {
     @Inject(CONFIGURATION) configuration: Configuration,
     mongoConnection: MongoConnection,
     private readonly playerProvider: player.MongoPlayerProvider,
+    private readonly boardProvider: board.MongoBoardProvider,
   ) {
-    this.boardProvider = new board.JSONFileBoardProvider(
-      configuration.dependencies.boardProvider,
-    );
-
     this.challengeProvider = new play.MongoChallengeProvider(
       mongoConnection,
       configuration.dependencies.challengeProvider,
@@ -82,7 +78,6 @@ export class PlaysService {
       new AvatarPool(configuration.avatarPool),
     );
   }
-
 
   // Starting any play — free or in any challenge — counts as the player
   // being active in all their ongoing challenges.

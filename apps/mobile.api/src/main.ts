@@ -4,6 +4,7 @@
  */
 
 import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
@@ -15,18 +16,13 @@ import { ASSETS_ROUTE } from './app/assets/assets.options';
 
 const CONFIG_ARG_PREFIX = '--config=';
 
+// The release packer puts the content configuration next to main.js, so a
+// container starts with no mounted files; --config and CONFIG_PATH override it.
+const CONFIG_PATH_DEFAULT = path.join(__dirname, 'configuration.json');
+
 function resolveConfigPath(): string {
   const arg = process.argv.find((value) => value.startsWith(CONFIG_ARG_PREFIX));
-  const configPath = arg?.slice(CONFIG_ARG_PREFIX.length) || process.env['CONFIG_PATH'];
-
-  if (!configPath) {
-    throw new Error(
-      'Configuration file path must be specified explicitly, either via ' +
-        '"--config=<path>" or the CONFIG_PATH environment variable',
-    );
-  }
-
-  return configPath;
+  return arg?.slice(CONFIG_ARG_PREFIX.length) || process.env['CONFIG_PATH'] || CONFIG_PATH_DEFAULT;
 }
 
 function loadConfiguration(configPath: string) {

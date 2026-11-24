@@ -95,6 +95,9 @@ export class ChallengeBots {
         authProvider: PlayerAuthProviderEnum.bot,
         externalId: id,
         createdAt: new Date().toISOString(),
+        // The server makes them; they never enter the game through the app.
+        appVersion: null,
+        lastEnterAt: null,
       },
     });
   }

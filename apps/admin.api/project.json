@@ -76,8 +76,8 @@
     "release": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "semantic-release --no-ci --extends ./apps/admin.api/release.config.mjs",
-        "cwd": "{workspaceRoot}"
+        "command": "semantic-release --no-ci",
+        "cwd": "{projectRoot}"
       }
     },
     "repair-release": {

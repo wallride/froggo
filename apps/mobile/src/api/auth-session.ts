@@ -1,3 +1,5 @@
+import { appFetch } from './app-fetch';
+
 // The player's access token for mobile.api, kept in memory only: the app
 // identifies the player at every start and gets a fresh one then. When the
 // token is refused (expired, or the server's secret changed), the request is
@@ -22,11 +24,11 @@ class AuthSession {
   // fetch() on behalf of the player.
   async fetch(url: string, init: RequestInit = {}): Promise<Response> {
     const token = this.accessToken;
-    const res = await fetch(url, withAccessToken(init, token));
+    const res = await appFetch(url, withAccessToken(init, token));
     if (res.status !== 401 || !this.reauthenticate) return res;
 
     const renewed = await this.renew(token);
-    return renewed ? fetch(url, withAccessToken(init, renewed)) : res;
+    return renewed ? appFetch(url, withAccessToken(init, renewed)) : res;
   }
 
   private async renew(refusedToken: string | null): Promise<string | null> {

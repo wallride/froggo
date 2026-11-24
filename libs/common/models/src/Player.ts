@@ -1,5 +1,7 @@
 import * as z from 'zod/v4';
 
+import { appVersionSchema } from './AppVersion';
+
 export enum PlayerAuthProviderEnum {
   anonymous = 'anonymous',
   google = 'google',
@@ -15,6 +17,16 @@ export const playerIdentitySchema = z.object({
   // device's secret id, never the id itself.
   externalId: z.string(),
   createdAt: z.iso.datetime(),
+  // The app release the player last entered the game with ("x.y.z", from the
+  // X-App-Version header). Server-side telemetry for later statistics: it
+  // never comes from the request body and isn't shown to anyone. Null for
+  // players the server creates itself (bots) and for records made before the
+  // version was kept.
+  appVersion: appVersionSchema.nullable().default(null),
+  // When the player last identified themselves, i.e. last entered the game.
+  // Written on every identify(), unlike appVersion. Null for records made
+  // before it was kept; a player who has entered since has a value.
+  lastEnterAt: z.iso.datetime().nullable().default(null),
 });
 
 export type PlayerIdentity = z.infer<typeof playerIdentitySchema>;

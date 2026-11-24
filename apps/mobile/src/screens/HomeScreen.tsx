@@ -21,7 +21,7 @@ import { colors, fonts } from '@dead-lines-inc/frontend';
 
 import type { RootStackParamList } from '../app/Navigation';
 import { useApis } from '../api/use-apis';
-import { formatText, useTexts } from '../localization/texts';
+import { formatText, useRepickedText, useTexts } from '../localization/texts';
 import { ChallengeResultPopup } from '../components/ChallengeResultPopup';
 import { isChallengeOver } from '../components/isChallengeOver';
 import { ModeCard } from '../components/ModeCard';
@@ -82,6 +82,9 @@ export function HomeScreen() {
   // first one) and when the app returns from the background while it's
   // focused — and the data is loaded anew.
   const [reloadKey, setReloadKey] = useState(0);
+  // Death's greeting is picked anew every time the screen is shown, not once
+  // per mount: coming back from another screen gives another quote.
+  const deathWelcome = useRepickedText('death', 'welcome', reloadKey);
   // The finished challenge whose result popup is open.
   const [resultChallenge, setResultChallenge] =
     useState<GetActiveChallengesResponse | null>(null);
@@ -263,13 +266,6 @@ export function HomeScreen() {
               </View>
             </Pressable>
             <View style={styles.topBarActions}>
-              <Pressable style={styles.iconButton}>
-                <Ionicons
-                  name="ribbon-outline"
-                  size={18}
-                  color={colors.textSecondary}
-                />
-              </Pressable>
               <Pressable
                 style={styles.iconButton}
                 onPress={() => navigation.navigate('Settings')}
@@ -322,7 +318,7 @@ export function HomeScreen() {
               },
             ]}
           >
-            <Text style={styles.deathLine}>{deathTexts.welcome}</Text>
+            <Text style={styles.deathLine}>{deathWelcome}</Text>
             <Text style={styles.deathTag}>{deathTexts.tag}</Text>
           </Animated.View>
         </View>

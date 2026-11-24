@@ -4,9 +4,10 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { colors, fonts } from '@dead-lines-inc/frontend';
 
+import { APP_VERSION } from '../api/app-version';
 import { useLanguage } from '../configuration/configuration-context';
 import { Screen, UNDER_HEADER } from '../layout/Screen';
-import { useTexts } from '../localization/texts';
+import { formatText, useTexts } from '../localization/texts';
 
 export function SettingsScreen() {
   const texts = useTexts('screens').settings;
@@ -50,6 +51,9 @@ export function SettingsScreen() {
         })}
       </View>
       {failed && <Text style={styles.error}>{errorTexts.changeLanguage}</Text>}
+      <Text style={styles.appVersion}>
+        {formatText(texts.appVersion, { version: APP_VERSION })}
+      </Text>
     </Screen>
   );
 }
@@ -91,5 +95,14 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontSize: 13,
     color: '#c00',
+  },
+  // Pushed to the bottom of the screen: it's a reference line, not an option.
+  appVersion: {
+    fontFamily: fonts.regular,
+    marginTop: 'auto',
+    paddingTop: 16,
+    fontSize: 12,
+    color: colors.textSecondary,
+    textAlign: 'center',
   },
 });

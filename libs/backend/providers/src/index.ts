@@ -1,4 +1,3 @@
-export * from './JSONFileProvider';
 export * from './MongoConnection';
 export * from './MongoProvider';
 export * from './MongoTransaction';

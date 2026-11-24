@@ -29,6 +29,8 @@ AppFrame (9:16 на широких экранах)
 | Файл | Роль |
 |---|---|
 | `api-config.ts` | `API_BASE_URL = EXPO_PUBLIC_API_BASE_URL ?? 'http://localhost:3001'` — build-time, не секрет |
+| `app-version.ts` / `app-fetch.ts` | `APP_VERSION` из `app.json` (`expo-constants`); `appFetch` добавляет `X-App-Version` на каждый запрос и на 426 показывает алерт обновления. Тот же `APP_VERSION` экран настроек показывает внизу подписью «Версия приложения: x.y.z» (`screens.settings.appVersion`, подстановка `{version}` через `formatText`) |
+| `app-update.ts` / `.web.ts` | Модалка «необходимо обновить»: `Alert` (Android без отмены, после «Обновить» — `exitApp`; iOS остаётся в фоне) и блокирующий DOM-оверлей на web; тексты — в бандле (`app-update-texts.ts`), URL магазина — заглушки в `app-store-url.ts` |
 | `api-url.ts` | `apiUrl(api, route)` = `api.baseUrl ?? API_BASE_URL` + путь из конфигурации; `assetUrl` — то же для ассетов |
 | `configuration-api.ts` | `ConfigurationAPI` → фиксированный `CONFIGURATION_ROUTE` |
 | `player-api.ts` / `play-api.ts` | реализации `IPlayerAPI` / `IPlayAPI`; каждый ответ парсится Zod-схемой |
@@ -37,6 +39,15 @@ AppFrame (9:16 на широких экранах)
 | `pending-play-results.ts` | очередь неотправленных результатов: файл `pending-play-results.json` в document dir, на web — localStorage; `queuePendingPlayResult` / `flushPendingPlayResults` |
 
 Клиент **не хардкодит пути**: их присылает сервер в `configuration.api.routes`.
+
+**Принудительное обновление.** Сервер отвечает `426` на любой запрос (включая `/api/configuration`),
+если версия сборки ниже `minimumAppVersion` (см. backend.md). `appFetch` в этом случае вызывает
+`requireAppUpdate()`: на iOS/Android — системный `Alert` с единственной кнопкой «Обновить» (без
+отмены), на web — блокирующий оверлей. Тексты вшиты в бандл (ru/en по языку устройства), потому что
+конфигурация к этому моменту может быть недоступна. Кнопка открывает страницу приложения в магазине
+(`app-store-url.ts`, пока заглушки). На Android после открытия магазина приложение закрывается
+(`BackHandler.exitApp`); на iOS закрыть приложение нельзя — оно уходит в фон, а при возврате алерт
+показывается снова (подписка на `AppState`).
 
 ## Конфигурация (`src/configuration/configuration-context.tsx`)
 
@@ -92,6 +103,9 @@ RootStackParamList = {
 Фразы приходят с сервера в виде `string | string[]` (варианты). `pickText(text, previous)`
 выбирает вариант, отличный от предыдущего; `resolveTexts(section)`, `formatText(text, vars)`
 (`{name}`), хуки `useTexts('playBoard')` и т.п. — по разделам `MobileTexts`.
+`useTexts` выбирает варианты один раз за монтирование; `useRepickedText(section, key, revision)`
+перевыбирает одну фразу при каждом изменении `revision` — так цитата Смерти на Home меняется
+при каждом возвращении на экран.
 
 ## Прочее
 

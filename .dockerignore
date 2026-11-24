@@ -1,0 +1,27 @@
+# What the image build doesn't need. The sources, the content configuration
+# (.mount/cfg) and the avatars (.mount/assets) are copied: they're part of the
+# image.
+.git
+.github
+.claude
+.expo
+.gitignore
+**/node_modules
+dist
+.nx
+tmp
+coverage
+**/*.log
+
+# Local secrets stay local: the container gets them from its environment.
+**/.env
+**/.env.local
+
+# Local Expo/EAS and editor leftovers.
+apps/mobile/.expo
+apps/mobile/dist
+apps/mobile/android
+apps/mobile/ios
+.DS_Store
+.idea
+.vscode

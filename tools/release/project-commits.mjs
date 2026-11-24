@@ -7,23 +7,20 @@
 // Options: { project: 'mobile.api', preset: 'conventionalcommits', ... } —
 // everything but `project` goes to the two plugins as their own options.
 import { execFileSync } from 'node:child_process';
-import { createRequire } from 'node:module';
 
 import { analyzeCommits as analyzeAllCommits } from '@semantic-release/commit-analyzer';
 import { generateNotes as generateAllNotes } from '@semantic-release/release-notes-generator';
 
-const require = createRequire(import.meta.url);
+import { createProjectGraphAsync, workspaceRoot } from './workspace.mjs';
 
 const rootsByProject = new Map();
 
 // The project's folder and those of the workspace projects it depends on,
-// directly or not, from the workspace root. Exported for repair-release.mjs,
-// which rebuilds the notes of a release that has to be recovered by hand.
+// directly or not, relative to the workspace root. Exported for
+// repair-release.mjs, which rebuilds the notes of a release recovered by hand.
 export async function projectRoots(project) {
   if (rootsByProject.has(project)) return rootsByProject.get(project);
-  // The daemon would keep the release process from exiting.
-  process.env.NX_DAEMON = 'false';
-  const { createProjectGraphAsync } = require('nx/src/devkit-exports');
+
   const graph = await createProjectGraphAsync({ exitOnError: true });
   if (!graph.nodes[project]) {
     throw new Error(`There's no project "${project}" in the workspace`);
@@ -51,7 +48,7 @@ async function projectContext({ project }, context) {
   const range = context.lastRelease.gitHead ? `${context.lastRelease.gitHead}..HEAD` : 'HEAD';
   const touching = new Set(
     execFileSync('git', ['log', '--format=%H', range, '--', ...roots], {
-      cwd: context.cwd,
+      cwd: workspaceRoot,
       encoding: 'utf8',
     })
       .split('\n')

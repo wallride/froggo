@@ -52,8 +52,10 @@ export class MongoPlayerProvider extends MongoProvider<IdentifyPlayer> implement
     authProvider: PlayerAuthProviderEnum,
     externalId: string,
     avatarId: string,
+    appVersion: string,
   ): Promise<IdentifyPlayer> {
     try {
+      const now = new Date().toISOString();
       return await this.save({
         id: uuid.v4(),
         name: 'Player',
@@ -62,7 +64,9 @@ export class MongoPlayerProvider extends MongoProvider<IdentifyPlayer> implement
         identity: {
           authProvider,
           externalId,
-          createdAt: new Date().toISOString(),
+          createdAt: now,
+          appVersion,
+          lastEnterAt: now,
         },
       });
     } catch (error) {

@@ -1,0 +1,17 @@
+{
+  "branches": ["main"],
+  "tagFormat": "mobile.api-v${version}",
+  "plugins": [
+    [
+      "../../tools/release/project-commits.mjs",
+      { "project": "mobile.api", "preset": "conventionalcommits" }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "node ../../tools/release/pack-backend.mjs mobile.api ${nextRelease.version}"
+      }
+    ],
+    ["../../tools/release/publish-backend.mjs", { "project": "mobile.api" }]
+  ]
+}

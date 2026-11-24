@@ -10,8 +10,8 @@ export const mongoProviderOptionsSchema = z.object({
 });
 export type IMongoProviderOptions = z.infer<typeof mongoProviderOptionsSchema>;
 
-// Base MongoDB storage functionality, mirroring JSONFileProvider but backed
-// by a shared MongoConnection instead of the filesystem.
+// Base MongoDB storage functionality: every provider shares the one
+// MongoConnection of the app and keeps its models in its own collection.
 export abstract class MongoProvider<T extends Document> {
   protected abstract schema: z.Schema<T>;
 

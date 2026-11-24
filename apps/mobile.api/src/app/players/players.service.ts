@@ -10,7 +10,12 @@ import {
   SetPlayerAvatarResponse,
   SetPlayerNameRequest,
 } from '@dead-lines-inc/common.api.mobile';
-import { IdentifyPlayer, PlayerAuthProviderEnum, PlayerAvatars } from '@dead-lines-inc/common.models';
+import {
+  IdentifyPlayer,
+  PlayerAuthProviderEnum,
+  PlayerAvatars,
+  PlayerIdentity,
+} from '@dead-lines-inc/common.models';
 
 import { Configuration } from '../../Configuration';
 import { PlayerTokens } from '../auth/player-tokens';
@@ -33,23 +38,31 @@ export class PlayersService {
     this.avatarPool = new AvatarPool(configuration.avatarPool);
   }
 
-  async identify(request: IdentifyPlayerRequest): Promise<IdentifyPlayerResponse> {
+  async identify(
+    request: IdentifyPlayerRequest,
+    appVersion: string,
+  ): Promise<IdentifyPlayerResponse> {
     assertTrustedIdentity(request);
     const { authProvider, externalId } = toStoredIdentity(request);
     const found = await this.playerProvider.findByIdentity(authProvider, externalId);
-    return { session: found ? await this.getSession(found) : null };
+    if (!found) return { session: null };
+    const player = await this.recordEntry(found, appVersion);
+    return { session: await this.getSession(player) };
   }
 
-  async register(request: IdentifyPlayerRequest): Promise<PlayerSession> {
+  async register(request: IdentifyPlayerRequest, appVersion: string): Promise<PlayerSession> {
     assertTrustedIdentity(request);
     const { authProvider, externalId } = toStoredIdentity(request);
+    const found = await this.playerProvider.findByIdentity(authProvider, externalId);
     const registered =
-      (await this.playerProvider.findByIdentity(authProvider, externalId)) ??
-      (await this.playerProvider.create(
-        authProvider,
-        externalId,
-        this.avatarPool.pickRandomStarterAvatarId(),
-      ));
+      found !== null
+        ? await this.recordEntry(found, appVersion)
+        : await this.playerProvider.create(
+            authProvider,
+            externalId,
+            this.avatarPool.pickRandomStarterAvatarId(),
+            appVersion,
+          );
     return this.getSession(registered);
   }
 
@@ -77,6 +90,18 @@ export class PlayersService {
     return found.isOnboarded
       ? found
       : this.playerProvider.update({ ...found, isOnboarded: true });
+  }
+
+  // Marks the player as having entered the game: with which release and when.
+  // Server-side statistics, so every identify() writes it — that's what
+  // lastEnterAt is for; the version changes only with an app update.
+  private async recordEntry(found: IdentifyPlayer, appVersion: string): Promise<IdentifyPlayer> {
+    const identity: PlayerIdentity = {
+      ...found.identity,
+      appVersion,
+      lastEnterAt: new Date().toISOString(),
+    };
+    return this.playerProvider.update({ ...found, identity });
   }
 
   private async getSession(found: IdentifyPlayer): Promise<PlayerSession> {

@@ -12,11 +12,11 @@ RUN --mount=type=secret,id=gh-token \
     --mount=type=secret,id=npm-token \
     export GH_TOKEN="$(tr -d '\n' < /run/secrets/gh-token)" && \
     echo "//registry.npmjs.org/:_authToken=$(cat /run/secrets/npm-token)" >> /home/node/.npmrc && \
-    mkdir /apps && \
-    GH_TOKEN=$(cat /run/secrets/gh-token) gh release download "$RELEASE" -R $REPOSITORY -O /tmp/app.tgz -p "$APP_NAME-v$RELEASE.tgz"
+    mkdir /tmp/app && \
+    GH_TOKEN=$(cat /run/secrets/gh-token) gh release download "$APP_NAME-v$RELEASE" -R $REPOSITORY -O /tmp/app.tar.gz -p "$APP_NAME-v$RELEASE.tar.gz"
 
-RUN tar -zxvf /tmp/app.tgz -C /tmp && \
-    mv /tmp/package /app && \
+RUN tar -zxvf /tmp/app.tar.gz -C /tmp/app && \
+    mv /tmp/app /app && \
     chown -R node:node /app
 
 USER node

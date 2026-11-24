@@ -5,14 +5,16 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BoardsModule } from './boards/boards.module';
 import { ConfigurationModule } from './configuration/configuration.module';
+import { DatabaseModule } from './database/database.module';
+import { HealthController } from './health/health.controller';
 
 @Module({})
 export class AppModule {
   static forRoot(configuration: Configuration): DynamicModule {
     return {
       module: AppModule,
-      imports: [ConfigurationModule.forRoot(configuration), BoardsModule],
-      controllers: [AppController],
+      imports: [ConfigurationModule.forRoot(configuration), DatabaseModule, BoardsModule],
+      controllers: [AppController, HealthController],
       providers: [AppService],
     };
   }

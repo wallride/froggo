@@ -8,10 +8,10 @@ import {
   mobileTextsSourceSchema,
 } from '@dead-lines-inc/common.models';
 
-import { configurationSchema } from '../../Configuration';
+import { configurationFileSchema } from '../../Configuration';
 import { localizeTexts, resolveLanguage } from './localize-texts';
 
-const config = configurationSchema.parse(
+const config = configurationFileSchema.parse(
   JSON.parse(
     fs.readFileSync(
       path.resolve(__dirname, '../../../../../.mount/cfg/mobile-api-configuration.json'),

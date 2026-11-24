@@ -1,11 +1,7 @@
 {
   "dependencies": {
     "boardProvider": {
-      "storage": {
-        "rootPath": "/app/storages/boards",
-        "filePatternRegExp": ".+\\.json"
-      },
-      "space": 2
+      "collectionName": "boards"
     },
     "mongo": {
       "database": "deadLinesInc"
@@ -47,9 +43,6 @@
       "min": 30,
       "max": 90
     }
-  },
-  "assets": {
-    "rootPath": "/app/storages/assets"
   },
   "avatarPool": {
     "common": [
@@ -183,7 +176,6 @@
             "I'd say well done, but I don't want to set a precedent.",
             "The report looks excellent. Especially the fictional parts.",
             "Error rates are up. Nice to see someone hitting their targets.",
-
             "Time off? Submit a request for your next life.",
             "Lunch break? That's for the living. Back to work.",
             "I'm on a well-earned vacation. You're on a well-earned probation period.",
@@ -196,7 +188,6 @@
             "You're doing great. I haven't even had to fire you yet.",
             "My vacation is going wonderfully. I hope yours isn't.",
             "Initiative is encouraged. Preferably someone else's.",
-
             "The queue won't get shorter just because you glare at it.",
             "Four thousand souls. Not one of them filed a complaint correctly.",
             "Please remain calm. Panicking is management's job.",
@@ -207,7 +198,6 @@
             "The line is moving. Slowly, but at least it's moving in the right direction.",
             "The queue's especially long today. Must be Monday.",
             "Welcome to Dead Lines Inc. Your patience is already under review.",
-
             "Everyone has a purpose. Yours is currently listed under miscellaneous duties.",
             "Death and taxes. And apparently quarterly performance reviews.",
             "I'm not heartless. I simply don't have a heart. Entirely different issue.",
@@ -223,7 +213,6 @@
             "Some things shouldn't be put off. I've tested this theory.",
             "Every closed case creates a new one. It's like a cursed filing cabinet.",
             "Life is short. Somehow, the workday isn't.",
-
             "I have high hopes for you. Don't make me bury them.",
             "You're learning fast. Compared to the furniture.",
             "You have tremendous potential. It's buried pretty deep.",
@@ -239,7 +228,6 @@
             "I like your enthusiasm. It's adorable watching it fade.",
             "Career advancement guaranteed. Direction depends on performance.",
             "Keep up the good work. I haven't decided what kind of good yet.",
-
             "Form 13-B. Eternity doesn't start without it.",
             "Please don't lose the paperwork. I already lost one intern that way.",
             "Applications for a second life require proof of a first.",
@@ -267,7 +255,6 @@
             "Я бы сказал «молодец», но не хочу создавать прецедент.",
             "В отчёте всё прекрасно. Особенно раздел с выдумками.",
             "Количество ошибок растёт. Приятно видеть стабильность.",
-
             "Отпуск? Поговорим об этом в твоей следующей жизни. Ха!",
             "Перерыв на обед? Это удел смертных! Возвращайся к работе.",
             "Я на заслуженном отдыхе. Ты на заслуженном испытательном сроке.",
@@ -280,7 +267,6 @@
             "Ты справляешься прекрасно. Мне даже не пришлось увольнять тебя.",
             "Мой отпуск идёт отлично. Надеюсь, у тебя всё наоборот.",
             "Помни: инициативность приветствуется. Особенно чужая.",
-
             "Очередь не становится короче от того, что ты на неё смотришь.",
             "Четыре тысячи душ. И ни одной жалобы по правильной форме.",
             "Пожалуйста, сохраняй спокойствие. Паниковать здесь положено только мне.",
@@ -291,7 +277,6 @@
             "Очередь движется. Медленно, но хотя бы в правильном направлении.",
             "Сегодня очередь особенно длинная. Понедельник, должно быть.",
             "Добро пожаловать в Dead Lines Inc. Ваше терпение уже проверяется.",
-
             "У каждого есть своё предназначение. У тебя пока только должностная инструкция.",
             "Смерть и налоги. И, судя по всему, ещё квартальные отчёты.",
             "Я не бессердечный. Просто у меня нет сердца. Это разные вещи.",
@@ -307,7 +292,6 @@
             "Некоторые дела лучше не откладывать. Я проверял.",
             "Помни: за каждым закрытым делом стоит новое открытое дело.",
             "Жизнь коротка. Рабочий день почему-то нет.",
-
             "Я возлагаю на тебя большие надежды. Не заставляй меня их хоронить.",
             "Ты быстро учишься. По сравнению с мебелью.",
             "У тебя огромный потенциал. Где-то очень глубоко.",
@@ -323,7 +307,6 @@
             "Мне нравится твой энтузиазм. Он так забавно угасает.",
             "Карьерный рост гарантирован. Направление зависит от результатов.",
             "Продолжай в том же духе. Я пока не решил, в каком именно.",
-
             "Форма 13-Б. Без неё даже вечность не начинается.",
             "Пожалуйста, не теряй документы. Мне уже пришлось потерять одного стажёра.",
             "Заявление на вторую жизнь принимается только при наличии первой.",
@@ -343,13 +326,33 @@
             "Quota met. Don't get used to the feeling.",
             "Souls processed, paperwork pending. Fine work.",
             "The queue moves. I'll allow myself a smile. Once.",
-            "Efficient. HR will hear about this, unfortunately for you."
+            "Efficient. HR will hear about this, unfortunately for you.",
+            "You were faster than I expected. My expectations were modest, to be fair.",
+            "Impressive. For an employee I hadn't bothered to remember until today.",
+            "An excellent result. Someone would get a bonus for this. Someone else.",
+            "I'm almost proud of you. Almost is the most you can count on.",
+            "Flawless. I do enjoy being wrong about people, even when it benefits you.",
+            "Good. Now you have a reputation to maintain. My condolences.",
+            "Expectations: raised. Salary: unchanged. Congratulations on the growth.",
+            "You've risen in my estimation. Admittedly, you started below the floorboards.",
+            "This is how careers are made. Or ended. We'll see which one you manage.",
+            "Efficient. Suspiciously efficient — security has been notified."
           ],
           "ru": [
             "План выполнен. Не привыкай к этому чувству.",
             "Души обработаны, бумажки в пути. Отличная работа.",
             "Очередь движется. Позволю себе улыбку. Одну.",
-            "Эффективно. Отдел кадров об этом узнает — к твоему сожалению."
+            "Эффективно. Отдел кадров об этом узнает — к твоему сожалению.",
+            "Ты справился быстрее, чем я ожидал. Ожидал я, впрочем, немного.",
+            "Впечатляюще. Для сотрудника, которого я до сегодня не запоминал.",
+            "Отличный результат. Кто-то получил бы за него премию. Кто-то другой.",
+            "Я почти горжусь тобой. «Почти» — это твой потолок.",
+            "Безупречно. Приятно ошибаться в людях, даже когда ошибка в твою пользу.",
+            "Хорошо. Теперь у тебя есть репутация, и её придётся поддерживать. Сочувствую.",
+            "Ожидания выросли. Оклад — нет. Поздравляю с ростом.",
+            "Ты вырос в моих глазах. Правда, стартовал ты ниже плинтуса.",
+            "Так делают карьеру. Или так её заканчивают. Увидим, что выйдет у тебя.",
+            "Эффективно. Подозрительно эффективно — охрана уже в курсе."
           ]
         },
         "playLost": {
@@ -616,6 +619,10 @@
           "languageHeading": {
             "en": "Language",
             "ru": "Язык"
+          },
+          "appVersion": {
+            "en": "App version: {version}",
+            "ru": "Версия приложения: {version}"
           }
         },
         "profile": {

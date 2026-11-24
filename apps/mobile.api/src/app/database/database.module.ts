@@ -1,6 +1,6 @@
 import { Global, Module, OnApplicationShutdown } from '@nestjs/common';
 
-import { MongoConnection, player } from '@dead-lines-inc/backend.providers';
+import { MongoConnection, board, player } from '@dead-lines-inc/backend.providers';
 
 import { Configuration } from '../../Configuration';
 import { CONFIGURATION } from '../configuration/configuration.token';
@@ -17,6 +17,18 @@ import { CONFIGURATION } from '../configuration/configuration.token';
         const connection = new MongoConnection(configuration.dependencies.mongo);
         await connection.connect();
         return connection;
+      },
+    },
+    {
+      provide: board.MongoBoardProvider,
+      inject: [MongoConnection, CONFIGURATION],
+      useFactory: async (connection: MongoConnection, configuration: Configuration) => {
+        const provider = new board.MongoBoardProvider(
+          connection,
+          configuration.dependencies.boardProvider,
+        );
+        await provider.ensureIndexes();
+        return provider;
       },
     },
     {
@@ -44,7 +56,12 @@ import { CONFIGURATION } from '../configuration/configuration.token';
       },
     },
   ],
-  exports: [MongoConnection, player.MongoPlayerProvider, player.MongoPlayerAvatarsProvider],
+  exports: [
+    MongoConnection,
+    board.MongoBoardProvider,
+    player.MongoPlayerProvider,
+    player.MongoPlayerAvatarsProvider,
+  ],
 })
 export class DatabaseModule implements OnApplicationShutdown {
   constructor(private readonly connection: MongoConnection) {}

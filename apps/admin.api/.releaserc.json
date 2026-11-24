@@ -1,0 +1,17 @@
+{
+  "branches": ["main"],
+  "tagFormat": "admin.api-v${version}",
+  "plugins": [
+    [
+      "../../tools/release/project-commits.mjs",
+      { "project": "admin.api", "preset": "conventionalcommits" }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "node ../../tools/release/pack-backend.mjs admin.api ${nextRelease.version}"
+      }
+    ],
+    ["../../tools/release/publish-backend.mjs", { "project": "admin.api" }]
+  ]
+}

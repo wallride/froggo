@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import type { LocalizedText, MobileTexts } from '@dead-lines-inc/common.models';
 
@@ -42,4 +42,24 @@ export function formatText(template: string, params: Record<string, string | num
 export function useTexts<K extends keyof MobileTexts>(section: K): ResolvedTexts<MobileTexts[K]> {
   const { texts } = useConfiguration();
   return useMemo(() => resolveTexts(texts[section]), [texts, section]);
+}
+
+// One phrase of a section, picked anew whenever `revision` changes — for a
+// phrase that must be different each time its screen is shown again (the home
+// screen's quote), unlike useTexts' pick made once per mount. `revision` is
+// anything that changes on that event, e.g. a counter bumped on focus.
+export function useRepickedText<
+  K extends keyof MobileTexts,
+  P extends keyof MobileTexts[K],
+>(section: K, key: P, revision: unknown): string {
+  const { texts } = useConfiguration();
+  const phrase = texts[section][key] as LocalizedText;
+  const [picked, setPicked] = useState(() => pickText(phrase));
+
+  useEffect(() => {
+    // Another variant than the one on screen, if the phrase has a choice.
+    setPicked((previous) => pickText(phrase, previous));
+  }, [phrase, revision]);
+
+  return picked;
 }

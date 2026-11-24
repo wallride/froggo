@@ -11,6 +11,7 @@ import {
 
 import { AuthenticatedPlayerId } from '../auth/authenticated-player-id.decorator';
 import { PlayerAuthGuard } from '../auth/player-auth.guard';
+import { AppVersion } from '../app-version/app-version.decorator';
 import { ZodValidationPipe } from '../common/zod-validation.pipe';
 import { PlayersService } from './players.service';
 
@@ -23,15 +24,17 @@ export class PlayersController {
   @Post('identify')
   identify(
     @Body(new ZodValidationPipe(identifyPlayerRequestSchema)) request: IdentifyPlayerRequest,
+    @AppVersion() appVersion: string,
   ) {
-    return this.playersService.identify(request);
+    return this.playersService.identify(request, appVersion);
   }
 
   @Post('register')
   register(
     @Body(new ZodValidationPipe(identifyPlayerRequestSchema)) request: IdentifyPlayerRequest,
+    @AppVersion() appVersion: string,
   ) {
-    return this.playersService.register(request);
+    return this.playersService.register(request, appVersion);
   }
 
   @Post('set-avatar')

@@ -2,6 +2,7 @@ export * from './Cell';
 export * from './BaseBoard';
 export * from './validateBoard';
 export * from './Player';
+export * from './AppVersion';
 export * from './Avatar';
 export * from './PlayerAvatars';
 export * from './MobileConfiguration';

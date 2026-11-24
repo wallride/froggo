@@ -1,10 +1,12 @@
 autoInstallPeers: true
+# Build scripts each dependency may run. The four below ship prebuilt binaries,
+# so their scripts aren't needed (and would need a compiler on Alpine).
 allowBuilds:
-  '@parcel/watcher': set this to true or false
-  '@swc/core': set this to true or false
-  less: set this to true or false
+  '@parcel/watcher': false
+  '@swc/core': false
+  less: false
   nx: true
-  unrs-resolver: set this to true or false
+  unrs-resolver: false
 minimumReleaseAgeExclude:
   - react-dom@19.2.8
   - react@19.2.8

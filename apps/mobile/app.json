@@ -7,16 +7,17 @@
     "icon": "./assets/images/icon.png",
     "scheme": "mobile",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.deadlinesinc.mobile"
     },
     "android": {
+      "package": "com.deadlinesinc.mobile",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true
+        "monochromeImage": "./assets/images/adaptive-icon-monochrome.png",
+        "backgroundColor": "#8b7cf6"
+      }
     },
     "web": {
       "bundler": "metro",
@@ -33,6 +34,12 @@
         }
       ],
       "expo-secure-store"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "abb2028f-d315-4762-862e-4d0f99468f7e"
+      }
+    },
+    "owner": "wallride"
   }
 }

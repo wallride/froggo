@@ -22,7 +22,8 @@ ci/        Docker environments
 ## Documentation
 
 Start with [docs/ai-context.md](docs/ai-context.md) — the project map for people and agents.
-Deployment and releases: [docs/deployment.md](docs/deployment.md),
+Releasing (step by step): [docs/release.md](docs/release.md).
+Deployment: [docs/deployment.md](docs/deployment.md),
 [docs/reference/release-deploy.md](docs/reference/release-deploy.md).
 
 ## Development

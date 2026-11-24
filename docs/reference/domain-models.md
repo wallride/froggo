@@ -35,6 +35,7 @@ PLAYER_NAME_MAX_LENGTH = 20; playerNameSchema = string.trim().min(1).max(20)
 playerSchema        = { id, name, avatarId }                       // публичные данные
 playerIdentitySchema = { provider: PlayerAuthProviderEnum, externalId }  // externalId для anonymous — SHA-256(deviceId)
 identifyPlayerSchema = playerSchema + { identity, isOnboarded: boolean = false }
+playerIdentitySchema += { appVersion: "x.y.z" | null = null, lastEnterAt: ISO | null = null }  // статистика
 ```
 `Avatar.ts`: `avatarSchema = { id, rarity: common|rare|epic|legendary }`; id = имя файла картинки.
 `PlayerAvatars.ts`: `{ playerId, avatarIds: string[] }` — доступные игроку аватары.
@@ -94,7 +95,7 @@ mobileConfigurationSchema = { api, ads: { penaltyAdUnitId: { android, ios } },
 ## Provider contracts (`libs/backend/providers`)
 
 ```
-board.IBoardProvider       add / get / update / getAll                     → реализация: JSONFileBoardProvider, MockBoardProvider
+board.IBoardProvider       add / get / update / getAll                     → реализация: MongoBoardProvider, MockBoardProvider
 player.IPlayerProvider     findByIdentity(provider, externalId) / create(provider, externalId, avatarId) / get / getMany / update
 player.IPlayerAvatarsProvider
 play.IChallengeProvider    get / start / finishExpired(now) / getLatest(type) / getMany(ids)
@@ -103,9 +104,9 @@ play.IPlayProvider         add / get / getForChallengeParticipation(participatio
 play.IPlayHistoryProvider
 ```
 Инфраструктура: `MongoConnection` (официальный драйвер), `MongoProvider` (базовый класс
-коллекции), `MongoTransaction`, `JSONFileProvider` (файлы на диске, `filePatternRegExp`, `space`).
-Опции каждого провайдера описаны Zod-схемами в `libs/backend/providers/src/**` и вставляются
-в конфиг приложения через `providers.*ProviderOptionsSchema`.
+коллекции), `MongoTransaction`. Опции каждого провайдера описаны Zod-схемами в
+`libs/backend/providers/src/**` и вставляются в конфиг приложения через
+`providers.*ProviderOptionsSchema`.
 
 ## Скоринг (константы в `apps/mobile.api/src/app/plays/plays.service.ts`)
 

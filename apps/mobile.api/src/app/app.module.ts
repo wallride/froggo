@@ -1,11 +1,14 @@
 import { DynamicModule, Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 
 import { Configuration } from '../Configuration';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AppVersionGuard } from './app-version/app-version.guard';
 import { AuthModule } from './auth/auth.module';
 import { ConfigurationModule } from './configuration/configuration.module';
 import { DatabaseModule } from './database/database.module';
+import { HealthController } from './health/health.controller';
 import { PlayersModule } from './players/players.module';
 import { PlaysModule } from './plays/plays.module';
 
@@ -21,8 +24,9 @@ export class AppModule {
         PlayersModule,
         PlaysModule,
       ],
-      controllers: [AppController],
-      providers: [AppService],
+      controllers: [AppController, HealthController],
+      // Before the route guards: an outdated app can't use the API at all.
+      providers: [AppService, { provide: APP_GUARD, useClass: AppVersionGuard }],
     };
   }
 }

@@ -4,18 +4,9 @@ import { board } from '@dead-lines-inc/backend.providers';
 import { Board, BaseBoard } from '@dead-lines-inc/common.models';
 import { IBoardAPI } from '@dead-lines-inc/common.api.admin';
 
-import { Configuration } from '../../Configuration';
-import { CONFIGURATION } from '../configuration/configuration.module';
-
 @Injectable()
 export class BoardsService implements IBoardAPI {
-  private readonly boardProvider: board.JSONFileBoardProvider;
-
-  constructor(@Inject(CONFIGURATION) configuration: Configuration) {
-    this.boardProvider = new board.JSONFileBoardProvider(
-      configuration.dependencies.boardProvider,
-    );
-  }
+  constructor(private readonly boardProvider: board.MongoBoardProvider) {}
 
   add(board: BaseBoard): Promise<Board> {
     return this.boardProvider.add(board);

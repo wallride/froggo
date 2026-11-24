@@ -15,6 +15,7 @@ export interface IPlayerProvider {
     authProvider: PlayerAuthProviderEnum,
     externalId: string,
     avatarId: string,
+    appVersion: string,
   ): Promise<IdentifyPlayer>;
 
   get(id: string): Promise<IdentifyPlayer | null>;

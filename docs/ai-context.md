@@ -11,7 +11,7 @@
 | Серверная логика, эндпоинты, конфиг, auth | [reference/backend.md](reference/backend.md) |
 | Мобильное приложение: старт, экраны, игра, API-клиенты | [reference/mobile-app.md](reference/mobile-app.md) |
 | Веб-админка (редактор досок) | [reference/admin-panel.md](reference/admin-panel.md) |
-| Релизы, Docker, секреты, деплой | [reference/release-deploy.md](reference/release-deploy.md), [deployment.md](deployment.md) |
+| Релизы, Docker, секреты, деплой | [release.md](release.md), [reference/release-deploy.md](reference/release-deploy.md), [deployment.md](deployment.md) |
 | Игровые правила и продуктовый замысел | [game-mechanics.md](game-mechanics.md), [design-concept.md](design-concept.md) |
 | Принципы архитектуры / ADR | [architecture.md](architecture.md), [adr/](adr/) |
 | Известные проблемы | ниже, раздел «Known issues» |
@@ -21,7 +21,7 @@
 - Nx 23 (integrated monorepo), pnpm, TypeScript 5.9 strict, Node 24.11.1 (см. `.nvmrc`, `engines`).
 - Mobile: Expo 57 / React Native 0.86 / react-native-web, react-navigation 7 (native-stack), reanimated 4, expo-image/font/localization/secure-store/file-system/crypto.
 - Backends: NestJS 11 (Express), `@nestjs/jwt`, Zod 4 (`zod/v4`) + `ZodValidationPipe`.
-- БД: MongoDB 7 (официальный драйвер, без ORM/Mongoose). Доски — JSON-файлы на диске.
+- БД: MongoDB 7 (официальный драйвер, без ORM/Mongoose): игроки, аватары, доски, челленджи, воспроизведения.
 - Releases: semantic-release 25 → GitHub Releases. Admin panel: React + Vite.
 
 ## Workspace map
@@ -36,11 +36,12 @@ apps/*-e2e           каркасные e2e-заготовки (не испол�
 libs/common/models           Zod-схемы + z.infer типы домена (единственный источник истины)
 libs/common/api/mobile       IPlayerAPI / IPlayAPI / IConfigurationAPI + request/response типы
 libs/common/api/admin        IBoardAPI
-libs/backend/providers       Mongo*/JSONFile* провайдеры, MongoConnection, MongoTransaction
+libs/backend/providers       Mongo-провайдеры (доски, игроки, челленджи, воспроизведения), MongoConnection, MongoTransaction
 libs/backend/processors      IPlayProcessor (задел, не подключён)
 libs/frontend                тема (colors, fonts) и kindColors — общие для mobile и admin
-tools/release                semantic-release-конфиг, упаковка архива, фильтр коммитов
-ci/docker                    Dockerfile/compose (см. release-deploy.md — есть расхождения)
+tools/release                плагины semantic-release, упаковка архива, ремонт релиза
+ci/docker                    старый Dockerfile/compose из чужого проекта (см. release-deploy.md)
+Dockerfile                   образ mobile.api для App Platform/VPS (см. deployment.md)
 ```
 
 Alias: `@dead-lines-inc/common.models`, `.../backend.providers`, `.../common.api.mobile`,
@@ -50,11 +51,12 @@ Alias: `@dead-lines-inc/common.models`, `.../backend.providers`, `.../common.api
 
 ```bash
 npx nx serve mobile          # Expo (Metro);  web: npx nx serve mobile --web
-npx nx serve mobile.api      # нужен CONFIG_PATH (см. apps/mobile.api/.env)
+npx nx serve mobile.api      # env — в apps/mobile.api/.env
 npx nx serve admin.api
 npx nx serve admin           # Vite-админка
 npx nx run-many -t build lint test
-npx nx run mobile.api:release   # semantic-release, см. release-deploy.md
+npx nx run mobile.api:release   # semantic-release, см. release.md
+cd apps/mobile && EAS_BUILD_SKIP_LOCKFILE_CHECK=1 eas build --profile preview --platform android  # см. release.md
 npx tsc --noEmit -p apps/mobile/tsconfig.app.json   # быстрый typecheck без Nx
 ```
 
@@ -63,12 +65,12 @@ npx tsc --noEmit -p apps/mobile/tsconfig.app.json   # быстрый typecheck �
 ## Golden rules
 
 1. **Секретов в файлах нет.** Никаких URI/логинов/паролей в репозитории (он публичный).
-   Всё приходит через env (`MONGO_URI`, `AUTH_TOKEN_SECRET`, `PORT`, `CONFIG_PATH`) и Docker secrets.
-   Конфиг-файлы на сервере монтируются снаружи. Схемы конфигов — `z.strictObject`: секрет,
-   оставленный в конфиге, роняет старт (это фича, не баг).
+   Всё приходит через env (`MONGO_URI`, `AUTH_TOKEN_SECRET`, `MINIMUM_APP_VERSION`, `PORT`) и
+   Docker secrets. Контентный конфиг — часть релиза, а не секрет. Схемы конфигов —
+   `z.strictObject`: секрет или env-переменная, оставленные в файле, роняют старт (это фича).
 2. **Типы моделей только через Zod.** Hand-written интерфейсы домена не пишем:
    `export const xSchema = z.object({...}); export type X = z.infer<typeof xSchema>; enum → z.enum.
-3. **Именованные экспорты**, без `default` (кроме конфигов semantic-release/vite).
+3. **Именованные экспорты**, без `default` (кроме конфигов vite).
 4. **Бизнес-логика вне UI и вне Nest-контроллеров**: контроллеры тонкие, логика в сервисах;
    правила игры — в `useBoardGame`/сервисах, не в разметке.
 5. **Изменение модели = ripple**: правишь `libs/common/models` → проверь оба API, mobile,
@@ -98,11 +100,11 @@ mobile start
 
 | Что | Где живёт | В репозитории |
 |---|---|---|
-| Конфиг API (провайдеры, лимиты, тексты, маршруты) | JSON-файл на сервере → `CONFIG_PATH` | шаблон значений: `.mount/cfg/*.json` (без секретов), пример пути в `.env.example` |
+| Контент API (провайдеры, лимиты, тексты, пул аватаров) | `configuration.json` рядом с `main.js`: его кладёт в архив `tools/release/pack-backend.mjs`, `CONFIG_PATH` переопределяет путь | шаблон значений: `.mount/cfg/*.json` (без секретов и без env) |
 | `MONGO_URI`, `AUTH_TOKEN_SECRET` | env / Docker secret | только имена в `.env.example` |
-| `PORT`, `CONFIG_PATH` | env | `.env.example` |
-| Доски (JSON) | `boardProvider.storage.rootPath` (bind mount) | тестовые доски в `.mount/storages/boards` |
-| Ассеты (аватары) | `assets.rootPath` (bind mount), отдаются как `/assets/*` | картинки в `.mount/assets` |
+| `MINIMUM_APP_VERSION`, `CORS_ALLOWED_ORIGINS`, `ASSETS_ROOT_PATH`, `ASSETS_PUBLIC_BASE_URL`, `PORT` | env | `.env.example` |
+| Доски | MongoDB, коллекция `boards` (`boardProvider.collectionName`) | — (импорт старых файлов: `tools/migrate-boards-to-mongo.mjs`) |
+| Ассеты (аватары) | `assets` рядом с `main.js` в архиве релиза (`ASSETS_ROOT_PATH`), отдаются как `/assets/*` | картинки в `.mount/assets` |
 
 Локальные `.env` — `apps/mobile.api/.env`, `apps/admin.api/.env` (gitignored).
 Корневой `.env` — наследие, к проекту не относится (см. Known issues).
@@ -111,15 +113,18 @@ mobile start
 
 - `npx nx run <app>:release` → semantic-release: коммиты, затрагивающие приложение или его
   зависимости в графе Nx → тег `<app>-v<version>` → GitHub Release с `<app>-v<version>.tar.gz`
-  (внутри `main.js`, `package.json`, `pnpm-lock.yaml`).
+  (внутри `main.js`, `package.json`, `pnpm-lock.yaml`). Настройки — обычный
+  `apps/<app>/.releaserc.json`; цель Nx запускает semantic-release в папке приложения
+  (`cwd: {projectRoot}`), общего конфига в `tools/` нет. Пошагово — [release.md](release.md).
 - Публикация релиза идемпотентна (`tools/release/publish-backend.mjs` + `gh-release.mjs`,
   через `gh` CLI; `@semantic-release/github` больше не используется). Доступ к GitHub
   проверяется до создания тега. Если тег уже есть, а релиза нет —
   `npx nx run <app>:repair-release` (`tools/release/repair-release.mjs`).
 - Токен GitHub — только через env: `GH_TOKEN` с `contents: write` (в файлы не кладётся;
   `GITHUB_TOKEN` тоже работает, но `GH_TOKEN` главнее).
-- Контейнер: скачать архив релиза → `pnpm install --prod --frozen-lockfile` → `node main.js`
-  с `CONFIG_PATH` на смонтированном томе.
+- Контейнер: скачать архив релиза → `pnpm install --prod --frozen-lockfile` → `node main.js`.
+  Ничего не монтируется: контентный конфиг и аватары уже в архиве, остальное — env.
+  Живость проверяется через `GET /api/health` (вне `AppVersionGuard`, без БД).
 - Подробности и открытые расхождения — [reference/release-deploy.md](reference/release-deploy.md).
 
 ## Known issues / gotchas

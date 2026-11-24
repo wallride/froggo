@@ -142,7 +142,7 @@ function buildTextsSchema<T extends z.ZodType>(t: T) {
     screens: z.object({
       archive: z.object({ title: t, description: t }),
       dailyTasks: z.object({ title: t, description: t }),
-      settings: z.object({ title: t, languageHeading: t }),
+      settings: z.object({ title: t, languageHeading: t, appVersion: t }), // {version}
       profile: z.object({
         title: t,
         namePlaceholder: t,
