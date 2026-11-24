@@ -1,6 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 
 import { SkipAppVersionCheck } from '../app-version/skip-app-version-check.decorator';
+import { Liveness, liveness } from './liveness';
 
 // Liveness for the hosting platform: while deploying it asks GET /api/health
 // and restarts the container when it doesn't get a 2xx. Kept independent of
@@ -10,7 +11,7 @@ import { SkipAppVersionCheck } from '../app-version/skip-app-version-check.decor
 @SkipAppVersionCheck()
 export class HealthController {
   @Get()
-  check(): { status: 'ok' } {
-    return { status: 'ok' };
+  check(): Liveness {
+    return liveness();
   }
 }

@@ -12,9 +12,17 @@
    рядом с `main.js` (его кладёт в архив packer): контейнер стартует без единого монтирования.
 2. `buildConfiguration(file, process.env)` — валидация контентного файла + операционных
    значений из env (см. ниже).
-3. `app.setGlobalPrefix('api')`, `enableCors({ origin: configuration.cors?.allowedOrigins ?? true })`.
-4. `useStaticAssets(assets.rootPath, { prefix: '/assets/', maxAge: '365d', immutable: true })`.
-5. `PORT` (по умолчанию 3001).
+3. `app.use(accessLog)` — до всех маршрутов: каждый запрос (включая 404 и запросы,
+   которые так и не получили ответ — `aborted`) пишется строкой `[HTTP]`, с `ip`,
+   `x-forwarded-for`, `x-forwarded-proto`, `Host` и `User-Agent`.
+4. `app.setGlobalPrefix('api')`, `enableCors({ origin: configuration.cors?.allowedOrigins ?? true })`.
+5. `useStaticAssets(assets.rootPath, { prefix: '/assets/', maxAge: '365d', immutable: true })`.
+6. Корневые `/` и `/health` отвечают той же живостью, что `/api/health`: платформа проверяет
+   liveness на `/` по умолчанию, и `404` там неотличим от мёртвого процесса.
+7. `app.listen(PORT, '0.0.0.0')` (`PORT` по умолчанию 3001; в образе 3000).
+8. Стартовые логи (без секретов): конфигурация (`mongo` без креденшелов, версия, ассеты, CORS),
+   фактический адрес прослушивания и сеть контейнера (hostname + IPv4); ошибка старта
+   печатается и завершает процесс с кодом 1.
 
 ### Конфигурация (`src/Configuration.ts`)
 
@@ -66,7 +74,7 @@
 
 | Метод | Путь | Auth | Request → Response |
 |---|---|---|---|
-| GET | `/health` | — | → `{ status: 'ok' }` (для хостинга; вне `AppVersionGuard`, БД не трогает) |
+| GET | `/health` | — | → `{ status: 'ok', uptime, startedAt }` (для хостинга; вне `AppVersionGuard`, БД не трогает). Та же живость отдаётся на корневых `/` и `/health` — вне префикса `api` |
 | GET | `/configuration?language=ru-RU,en` | — | `GetConfigurationRequest` → `MobileConfiguration` (тексты на одном языке; язык выбирается по первому совпавшему, фолбэк — `en`) |
 | POST | `/players/identify` | — | `{authProvider, externalId}` → `{ session: PlayerSession \| null }` |
 | POST | `/players/register` | — | `{authProvider, externalId}` → `PlayerSession` (идемпотентно: существующий игрок возвращается как есть) |
