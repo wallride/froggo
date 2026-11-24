@@ -9,6 +9,8 @@ import * as path from 'node:path';
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+
+import { MongoConnection } from '@dead-lines-inc/backend.providers';
 import { buildConfiguration } from './Configuration';
 import { AppModule } from './app/app.module';
 import { ASSETS_ROUTE } from './app/assets/assets.options';
@@ -19,6 +21,7 @@ import {
   describeListenAddress,
   describeNetwork,
 } from './app/diagnostics/startup-log';
+import type { DatabaseState } from './app/health/liveness';
 import { liveness } from './app/health/liveness';
 
 const CONFIG_ARG_PREFIX = '--config=';
@@ -71,11 +74,14 @@ async function bootstrap() {
   // The API lives under /api, but platforms probe liveness on "/" (or
   // "/health") and a 404 there is indistinguishable from a dead process.
   const httpServer = app.getHttpAdapter().getInstance();
+  const connection = app.get(MongoConnection, { strict: false });
+  const databaseState = (): DatabaseState =>
+    connection.isConnected() ? 'connected' : 'disconnected';
   const answerLiveness = (
     _request: unknown,
     response: HttpResponseLike,
   ): void => {
-    response.status(200).json(liveness());
+    response.status(200).json(liveness(databaseState()));
   };
   httpServer.get('/', answerLiveness);
   httpServer.get('/health', answerLiveness);

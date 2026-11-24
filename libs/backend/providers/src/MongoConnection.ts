@@ -29,6 +29,11 @@ export class MongoConnection {
     this.db = this.client.db(this.options.database);
   }
 
+  // Whether the client has been connected (health reporting, diagnostics).
+  isConnected(): boolean {
+    return this.db !== undefined;
+  }
+
   async disconnect(): Promise<void> {
     await this.client?.close();
     this.client = undefined;

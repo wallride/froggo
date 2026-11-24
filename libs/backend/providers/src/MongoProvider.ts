@@ -15,13 +15,15 @@ export type IMongoProviderOptions = z.infer<typeof mongoProviderOptionsSchema>;
 export abstract class MongoProvider<T extends Document> {
   protected abstract schema: z.Schema<T>;
 
-  protected collection: Collection<T>;
-
   constructor(
     protected readonly connection: MongoConnection,
     protected readonly options: IMongoProviderOptions,
-  ) {
-    this.collection = connection.getCollection<T>(options.collectionName);
+  ) {}
+
+  // Resolved on use, not in the constructor: the connection may still be
+  // opening, and a provider is a plain object until its first query.
+  protected get collection(): Collection<T> {
+    return this.connection.getCollection<T>(this.options.collectionName);
   }
 
   protected abstract getModelId(model: T): string;
